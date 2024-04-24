@@ -1,0 +1,38 @@
+name: code-check
+
+on:
+  push:
+
+jobs:
+  build:
+    name: 👷🏻‍♀️ Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🧰 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: 🛠️ Setup Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: 🧳 Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧽 Prettier
+        run: pnpm run format:check
+
+      - name: 👮🏻 Lint
+        run: pnpm run lint
