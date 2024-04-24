@@ -24,7 +24,7 @@ export function mapCardType(apiType: string): CardType {
 }
 
 export function mapAttribute(
-  apiAttribute?: string
+  apiAttribute?: string,
 ): MonsterAttribute | undefined {
   if (!apiAttribute) {
     return undefined;
@@ -38,7 +38,7 @@ export function mapAttribute(
 }
 
 export function mapLinkMarkers(
-  apiMarkers?: string[]
+  apiMarkers?: string[],
 ): LinkMarker[] | undefined {
   if (!apiMarkers) {
     return undefined;

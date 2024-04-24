@@ -93,7 +93,7 @@ async function uploadImageToVercel(
   card: {
     id: number;
     name: string;
-  }
+  },
 ) {
   const imageResponse = await fetch(imagePath);
   const blob = await imageResponse.blob();
@@ -124,7 +124,7 @@ async function updateDatabaseAndUploadImages() {
         {
           id: card.id,
           name: card.name,
-        }
+        },
       );
 
       if (!imageUrl) {
