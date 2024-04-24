@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check-types": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "vercel:build": "prisma migrate deploy && next build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.0.0",
