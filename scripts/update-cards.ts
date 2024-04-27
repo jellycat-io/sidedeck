@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { put } from '@vercel/blob';
-import FormData from 'form-data';
+import { ListBlobResult, ListBlobResultBlob, list, put } from '@vercel/blob';
+import chalk from 'chalk';
 import fetch from 'node-fetch';
 
-import fs from 'fs';
+import { exit } from 'process';
 
 import {
   mapAttribute,
@@ -12,7 +12,6 @@ import {
   mapLinkMarkers,
   mapRace,
 } from '../lib/cards/helpers';
-import { db } from '../lib/db';
 
 interface ApiCardData {
   id: number;
@@ -63,13 +62,15 @@ type ApiResponse = {
 
 const prisma = new PrismaClient();
 
+const log = console.log;
+
 const API_URL = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
 
 let cards: ApiCardData[] | null = null;
 
 async function fetchCards() {
   if (cards !== null) {
-    console.log('Using cached card data');
+    log('Using cached card data');
     return cards;
   }
 
@@ -84,7 +85,39 @@ async function fetchCards() {
 
   const storedCards = await prisma.card.findMany();
 
-  return cards.filter((card) => !storedCards.some((c) => c.id === card.id));
+  const newCards = cards.filter(
+    (card) => !storedCards.some((c) => c.id === card.id),
+  );
+
+  if (newCards.length === 0) {
+    log(chalk.green('No new cards to store!'));
+    exit(0);
+  }
+
+  log(chalk.yellow(`${storedCards.length} cards already stored`));
+  log(chalk.green(`${newCards.length} new cards to store`));
+
+  return newCards;
+}
+
+async function getAllBlobs() {
+  const allBlobs = [];
+  let continuationToken;
+
+  do {
+    const blobs: ListBlobResult = await list({
+      cursor: continuationToken,
+    });
+
+    allBlobs.push(...blobs.blobs);
+    continuationToken = blobs.cursor;
+  } while (continuationToken);
+
+  return allBlobs;
+}
+
+async function checkBlobExists(blobs: ListBlobResultBlob[], pathname: string) {
+  return blobs.find((blob) => blob.pathname === pathname);
 }
 
 async function uploadImageToVercel(
@@ -98,27 +131,47 @@ async function uploadImageToVercel(
   const imageResponse = await fetch(imagePath);
   const blob = await imageResponse.blob();
 
+  log(chalk.blue(`Uploading blob...`));
+
   const response = await put(imageName, blob, {
     access: 'public',
   });
 
-  console.log(`Uploaded image for <${card.id}> ${card.name}: ${response.url}`);
+  log(chalk.green(`Blob uploaded: ${response.url}!`));
 
   return response.url;
 }
 
 async function updateDatabaseAndUploadImages() {
+  log(chalk.blue('Gettings cards from ygoprodeck API...'));
   const cards = await fetchCards();
+  log(chalk.green('Cards fetched!'));
+  log(chalk.blue('Getting blobs from Vercel...'));
+  const blobs = await getAllBlobs();
+  log(chalk.green('Blobs fetched!'));
 
   for (const card of cards) {
     const existingCard = await prisma.card.findUnique({
       where: { id: card.id },
     });
 
-    if (existingCard) console.log(`Card already stored: ${card.name}`);
+    if (existingCard) {
+      console.log(chalk.yellow(`Card already stored: ${card.name}`));
+      continue;
+    }
 
-    if (!existingCard) {
-      const imageUrl = await uploadImageToVercel(
+    log('------------------------------------');
+    log(chalk.bold(`${card.name} <${card.id}>`));
+
+    let imageUrl;
+
+    const existingBlob = await checkBlobExists(blobs, `${card.id}.jpg`);
+
+    if (existingBlob) {
+      imageUrl = existingBlob.url;
+      console.log(chalk.yellow(`Blob already exists`));
+    } else {
+      const blobUrl = await uploadImageToVercel(
         card.card_images[0].image_url,
         `${card.id}.jpg`,
         {
@@ -127,34 +180,41 @@ async function updateDatabaseAndUploadImages() {
         },
       );
 
-      if (!imageUrl) {
-        throw new Error(`Failed to upload image for ${card.name}`);
+      if (!blobUrl) {
+        throw new Error(`Failed to upload blob for ${card.name}`);
       }
 
-      await prisma.card.create({
-        data: {
-          id: card.id,
-          name: card.name,
-          type: mapCardType(card.type),
-          desc: card.desc,
-          atk: card.atk,
-          def: card.def,
-          level: card.level,
-          scale: card.scale,
-          linkval: card.linkval,
-          archetype: card.archetype,
-          image_url: imageUrl,
-          frameType: mapFrameType(card.frameType),
-          linkmarkers: mapLinkMarkers(card.linkmarkers),
-          race: mapRace(card.race),
-          attribute: mapAttribute(card.attribute),
-          card_sets: card.card_sets,
-          card_prices: card.card_prices,
-          banlist_info: card.banlist_info,
-        },
-      });
-      console.log(`Added new card: ${card.name}`);
+      imageUrl = blobUrl;
     }
+
+    if (!imageUrl) {
+      throw new Error(`No image url for ${card.name}`);
+    }
+
+    await prisma.card.create({
+      data: {
+        id: card.id,
+        name: card.name,
+        type: mapCardType(card.type),
+        desc: card.desc,
+        atk: card.atk,
+        def: card.def,
+        level: card.level,
+        scale: card.scale,
+        linkval: card.linkval,
+        archetype: card.archetype,
+        image_url: imageUrl,
+        frameType: mapFrameType(card.frameType),
+        linkmarkers: mapLinkMarkers(card.linkmarkers),
+        race: mapRace(card.race),
+        attribute: mapAttribute(card.attribute),
+        card_sets: card.card_sets,
+        card_prices: card.card_prices,
+        banlist_info: card.banlist_info,
+      },
+    });
+
+    log(chalk.green(`Card stored!`));
   }
 }
 
