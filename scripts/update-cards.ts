@@ -8,6 +8,7 @@ import path from 'path';
 
 import { toSnakeCase } from '@/lib/utils';
 import {
+  BanlistInfo,
   Card,
   CardRace,
   CardType,
@@ -237,7 +238,7 @@ async function updateCards(): Promise<void> {
           : undefined,
         cardSets: apiCard.card_sets,
         cardPrices: apiCard.card_prices,
-        banlistInfo: apiCard.banlist_info,
+        banlistInfo: apiCard.banlist_info as BanlistInfo,
       };
     });
 
