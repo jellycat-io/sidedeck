@@ -1,4 +1,4 @@
-import { CardsProvider } from '@/contexts/cards-context';
+import { Navbar } from './_components/navbar';
 
 interface PlatformLayoutProps {
   children: React.ReactNode;
@@ -6,8 +6,9 @@ interface PlatformLayoutProps {
 
 export default function PlatformLayout({ children }: PlatformLayoutProps) {
   return (
-    <CardsProvider>
-      <main className='h-full p-8'>{children}</main>
-    </CardsProvider>
+    <div className='h-screen'>
+      <Navbar />
+      <main className='p-8'>{children}</main>
+    </div>
   );
 }

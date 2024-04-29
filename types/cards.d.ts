@@ -118,10 +118,12 @@ interface CardPrice {
   coolstuffinc_price: string;
 }
 
+type BanStatus = 'Banned' | 'Limited' | 'Semi-Limited';
+
 interface BanlistInfo {
-  ban_tcg: string;
-  ban_ocg: string;
-  ban_goat: string;
+  ban_tcg: BanStatus;
+  ban_ocg: BanStatus;
+  ban_goat: BanStatus;
 }
 
 export interface Card {

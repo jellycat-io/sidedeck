@@ -1,19 +1,35 @@
 'use server';
 
+import { z } from 'zod';
+
 import { getCards } from '@/data/card';
-import { FetchState, createSafeFetch } from '@/lib/create-safe-fetch';
+import { fuzzyMatch } from '@/lib/utils';
+import { GetCardsSchema } from '@/schemas/card';
 import { Card } from '@/types/cards';
 
-export type GetCardsResponse = FetchState<Card[]>;
+export type GetCardsInput = z.infer<typeof GetCardsSchema>;
+export type GetCardsResponse = {
+  totalCount: number;
+  cards: Card[];
+};
 
-async function handler(): Promise<GetCardsResponse> {
-  const cards = await getCards();
+export async function getCardsAction({
+  page = 0,
+  pageSize = 20,
+  query = '',
+}: GetCardsInput): Promise<GetCardsResponse> {
+  let cards = await getCards();
 
-  if (!cards) {
-    return { error: 'No cards found' };
+  if (query) {
+    cards = cards.filter((card) =>
+      card.name.toLowerCase().includes(query.toLowerCase()),
+    );
   }
 
-  return { data: cards };
-}
+  const offset = page * pageSize;
 
-export const getCardsAction = createSafeFetch(handler);
+  return {
+    totalCount: cards.length,
+    cards: cards.slice(offset, offset + pageSize),
+  };
+}

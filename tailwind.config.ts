@@ -56,6 +56,62 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        frameNormal: {
+          DEFAULT: 'hsl(var(--frame-normal))',
+          foreground: 'hsl(var(--frame-normal-foreground))',
+        },
+        frameEffect: {
+          DEFAULT: 'hsl(var(--frame-effect))',
+          foreground: 'hsl(var(--frame-effect-foreground))',
+        },
+        frameFusion: {
+          DEFAULT: 'hsl(var(--frame-fusion))',
+          foreground: 'hsl(var(--frame-fusion-foreground))',
+        },
+        frameRitual: {
+          DEFAULT: 'hsl(var(--frame-ritual))',
+          foreground: 'hsl(var(--frame-ritual-foreground))',
+        },
+        frameSynchro: {
+          DEFAULT: 'hsl(var(--frame-synchro))',
+          foreground: 'hsl(var(--frame-synchro-foreground))',
+        },
+        frameXyz: {
+          DEFAULT: 'hsl(var(--frame-xyz))',
+          foreground: 'hsl(var(--frame-xyz-foreground))',
+        },
+        frameLink: {
+          DEFAULT: 'hsl(var(--frame-link))',
+          foreground: 'hsl(var(--frame-link-foreground))',
+        },
+        framePendulum: {
+          DEFAULT: 'hsl(var(--frame-pendulum))',
+          foreground: 'hsl(var(--frame-pendulum-foreground))',
+        },
+        frameToken: {
+          DEFAULT: 'hsl(var(--frame-token))',
+          foreground: 'hsl(var(--frame-token-foreground))',
+        },
+        frameSpell: {
+          DEFAULT: 'hsl(var(--frame-spell))',
+          foreground: 'hsl(var(--frame-spell-foreground))',
+        },
+        frameTrap: {
+          DEFAULT: 'hsl(var(--frame-trap))',
+          foreground: 'hsl(var(--frame-trap-foreground))',
+        },
+        frameSlifer: {
+          DEFAULT: 'hsl(var(--frame-slifer))',
+          foreground: 'hsl(var(--frame-slifer-foreground))',
+        },
+        frameObelisk: {
+          DEFAULT: 'hsl(var(--frame-obelisk))',
+          foreground: 'hsl(var(--frame-obelisk-foreground))',
+        },
+        frameRa: {
+          DEFAULT: 'hsl(var(--frame-ra))',
+          foreground: 'hsl(var(--frame-ra-foreground))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

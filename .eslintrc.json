@@ -1,6 +1,7 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
+    "import/no-unused-modules": "error",
     "import/order": [
       1,
       {

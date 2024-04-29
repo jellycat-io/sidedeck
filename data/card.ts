@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 
+import { fuzzyMatch } from '@/lib/utils';
 import { Card } from '@/types/cards';
 
 // Construct the path to the JSON file
@@ -51,6 +52,17 @@ export async function getCardByName(name: string) {
   } catch (error) {
     throw new Error(
       `Error getting card by name: ${name}, ${error instanceof Error ? error.message : error}`,
+    );
+  }
+}
+
+export async function getCardsByQuery(query: string) {
+  try {
+    const cards = loadCards();
+    return cards.filter((c) => fuzzyMatch(c.name, query));
+  } catch (error) {
+    throw new Error(
+      `Error getting cards by query: ${query}, ${error instanceof Error ? error.message : error}`,
     );
   }
 }

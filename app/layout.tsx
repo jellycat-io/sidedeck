@@ -36,7 +36,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang='en' suppressHydrationWarning>
         <body
-          className={cn('h-full antialiased', GeistSans.className)}
+          className={cn('antialiased', GeistSans.className)}
           suppressHydrationWarning
         >
           <ThemeProvider

@@ -12,7 +12,7 @@ export function Navbar() {
       <div className='md:max-w-screen-2xl mx-auto flex items-center w-full justify-between'>
         <Logo withLabel hideOnMobile />
         <div className='flex space-x-4 md:w-auto items-center justify-between w-full'>
-          <Button variant='secondary' size='sm' asChild>
+          <Button size='sm' asChild>
             <Link href={Routes.auth.login}>
               <DoorOpen className='w-4 h-4 mr-2' />
               Login

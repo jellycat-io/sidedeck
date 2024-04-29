@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 
+import { getCardAction } from '@/actions/platform/get-card';
 import { CardImage } from '@/components/card-image';
 import {
   Tooltip,
@@ -9,17 +10,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useCards } from '@/hooks/use-cards';
+import { useFetch } from '@/hooks/use-fetch';
+import { Card } from '@/types/cards';
 
 interface CardTooltipProps {
-  id: string;
+  card: Card;
 }
 
-export function CardTooltip({ id }: CardTooltipProps) {
-  const { getCard } = useCards();
-
-  const card = useMemo(() => getCard(id), [id, getCard]);
-
+export function CardTooltip({ card }: CardTooltipProps) {
   return (
     <>
       {card && (
