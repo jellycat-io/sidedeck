@@ -29,7 +29,10 @@ export const apiAuthPrefix = '/api/auth';
  */
 export const Routes = {
   landing: '/',
-  dashboard: '/dashboard',
+  platform: {
+    dashboard: '/dashboard',
+    library: '/library',
+  },
   auth: {
     login: '/auth/login',
     register: '/auth/register',
@@ -44,4 +47,4 @@ export const Routes = {
  * The default redirect path after a successful login.
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = Routes.dashboard;
+export const DEFAULT_LOGIN_REDIRECT = Routes.platform.dashboard;

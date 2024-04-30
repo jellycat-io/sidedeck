@@ -6,6 +6,10 @@ export const GetCardsSchema = z.object({
   query: z.string().optional(),
 });
 
+export const GetLastUserCardSchema = z.object({
+  userId: z.string(),
+});
+
 export const GetCardSchema = z.object({
   cardId: z.string(),
 });

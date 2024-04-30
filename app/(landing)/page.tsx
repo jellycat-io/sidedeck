@@ -2,9 +2,7 @@
 
 import * as dateFns from 'date-fns';
 import { Calendar, Rocket } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useTransition } from 'react';
 
 import { getNews } from '@/actions/news/get-news';
 import { Logo } from '@/components/logo';
@@ -34,8 +32,6 @@ const features: Array<{
 ];
 
 export default function LandingPage() {
-  const [isPending, startTransition] = useTransition();
-
   const { data: news, loading: loadingNews } = useFetch(getNews);
 
   return (

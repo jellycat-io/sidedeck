@@ -22,8 +22,10 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent side='bottom'>
-        <div className='flex items-start space-x-6'>
-          <CardImage src={card.imageUrl} alt={card.name} width={250} />
+        <div className='flex items-start md:space-x-6'>
+          <div className='hidden md:block'>
+            <CardImage src={card.imageUrl} alt={card.name} width={250} />
+          </div>
           <div className='flex flex-col space-y-4 w-2/3'>
             <div className='flex flex-col space-y-3'>
               <div>
@@ -38,7 +40,7 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
               <div className='flex space-x-3'>
                 {card.attribute && (
                   <div className='flex items-center gap-x-1.5 text-sm'>
-                    <div className='h-5 w-5'>
+                    <div className='h-5 w-5 rounded-full overflow-hidden'>
                       <Image
                         src={`/icons/attributes/${card.attribute}.svg`}
                         alt={card.attribute}
@@ -51,13 +53,12 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
                 )}
                 {card.race && (
                   <div className='flex items-center gap-x-1.5 text-sm'>
-                    <div className='h-5 w-5'>
+                    <div className='h-5 w-5 rounded-full overflow-hidden'>
                       <Image
                         src={`/icons/races/${card.race}.svg`}
                         alt={card.type}
                         width={24}
                         height={24}
-                        className='rounded-full'
                       />
                     </div>
                     <span>{snakeCaseToCapitalized(card.race)}</span>
@@ -100,12 +101,12 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
               </div>
             )}
             {card.cardPrices.length > 0 && (
-              <div className='space-y-1'>
+              <div className='flex flex-col items-start space-y-1'>
                 <h4 className='text-md font-semibold'>Prices</h4>
                 {card.cardPrices.map((price, i) => (
                   <div
                     key={`price-${i}`}
-                    className='flex flex-wrap items-center space-x-2'
+                    className='flex flex-col lg:flex-row items-start lg:items-center space-y-1 lg:space-x-2'
                   >
                     {Object.entries(price).map(([key, value]) => (
                       <>
@@ -125,7 +126,7 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
             )}
           </div>
         </div>
-        <SheetFooter>
+        <SheetFooter className='pt-4'>
           <Button variant='outline' onClick={() => onOpenChange(false)}>
             Close
           </Button>

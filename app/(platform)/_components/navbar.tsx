@@ -1,20 +1,24 @@
-import { DoorOpen, Github } from 'lucide-react';
+import { Github } from 'lucide-react';
 import Link from 'next/link';
 
 import { CardFinder } from '@/components/card-finder';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@/components/user-button';
-import { Routes } from '@/routes';
+
+import { MobileSidebar } from './mobile-sidebar';
 
 export function Navbar() {
   return (
-    <nav className='sticky top-0 w-full z-20 h-14 px-4 border-b shadow-sm flex items-center bg-background'>
-      <div className='md:max-w-screen-2xl mx-auto flex items-center w-full justify-between'>
-        <Logo withLabel hideOnMobile />
-        <div className='flex space-x-4 md:w-auto items-center justify-between w-full'>
+    <nav className='fixed top-0 w-full z-50 h-14 px-4 border-b shadow-sm flex items-center bg-background'>
+      <div className='flex items-center gap-x-4 w-full md:justify-between'>
+        <MobileSidebar />
+        <div className='hidden md:flex pr-4 md:pr-2'>
+          <Logo withLabel />
+        </div>
+        <div className='w-full flex justify-between md:justify-end md:space-x-4'>
           <CardFinder />
-          <div className='flex space-x-2 items-center'>
+          <div className='flex space-x-4 items-center'>
             <UserButton />
             <Link
               href='https://github.com/jellycat-io/sidedeck'

@@ -5,8 +5,7 @@ import {
   getPasswordResetTokenByEmail,
   getVerificationTokenByEmail,
 } from '@/data/token';
-
-import { db } from './db';
+import { db } from '@/lib/db';
 
 export async function generateVerificationToken(
   email: string,

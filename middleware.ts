@@ -1,12 +1,11 @@
 import { auth as middleware } from '@/auth';
-
 import {
   DEFAULT_LOGIN_REDIRECT,
   Routes,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
-} from './routes';
+} from '@/routes';
 
 export default middleware((req) => {
   const { nextUrl } = req;

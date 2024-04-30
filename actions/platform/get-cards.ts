@@ -3,7 +3,6 @@
 import { z } from 'zod';
 
 import { getCards } from '@/data/card';
-import { fuzzyMatch } from '@/lib/utils';
 import { GetCardsSchema } from '@/schemas/card';
 import { Card } from '@/types/cards';
 

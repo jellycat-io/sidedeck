@@ -4,12 +4,11 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 
+import { getAccountByUserId } from '@/data/account';
 import { getUserByEmail, getUserById } from '@/data/user';
+import { db } from '@/lib/db';
+import { Routes } from '@/routes';
 import { LoginSchema } from '@/schemas/auth';
-
-import { getAccountByUserId } from './data/account';
-import { db } from './lib/db';
-import { Routes } from './routes';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),

@@ -1,8 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
-
-import { getCardAction } from '@/actions/platform/get-card';
 import { CardImage } from '@/components/card-image';
 import {
   Tooltip,
@@ -10,7 +7,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useFetch } from '@/hooks/use-fetch';
 import { Card } from '@/types/cards';
 
 interface CardTooltipProps {

@@ -43,7 +43,10 @@ export function UserButton() {
           asChild
         >
           <Avatar>
-            <AvatarImage src={user.image ?? ''} alt={user?.name ?? ''} />
+            <AvatarImage
+              src={user?.image ?? undefined}
+              alt={user?.name ?? undefined}
+            />
             <AvatarFallback>
               <User className='h-4 w-4' />
             </AvatarFallback>

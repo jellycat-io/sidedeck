@@ -1,19 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { set } from 'date-fns';
-import {
-  Command,
-  Link,
-  LoaderCircle,
-  Shield,
-  Star,
-  Swords,
-} from 'lucide-react';
-import Image from 'next/image';
+import { LoaderCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { getCardsAction } from '@/actions/platform/get-cards';
+import { CardSheet } from '@/components/card-sheet';
+import { FrameTypeBadge } from '@/components/frame-type-badge';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -25,20 +18,7 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { useDebounce } from '@/hooks/use-debounce';
-import { getFrametypeColors, snakeCaseToCapitalized } from '@/lib/utils';
 import { Card } from '@/types/cards';
-
-import { CardImage } from './card-image';
-import { CardSheet } from './card-sheet';
-import { Badge } from './ui/badge';
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from './ui/sheet';
-import { Skeleton } from './ui/skeleton';
 
 const PAGE_SIZE = 20;
 
@@ -116,7 +96,7 @@ export function CardFinder() {
     <>
       <Button variant='outline' size='sm' onClick={() => setOpenFinder(true)}>
         Card finder
-        <kbd className='ml-2 inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground'>
+        <kbd className='ml-2 inline-flex h-5 items-center gap-1 rounded border px-1.5 text-[10px] font-medium'>
           <span className='text-xs'>⌘</span>Z
         </kbd>
       </Button>
@@ -142,16 +122,7 @@ export function CardFinder() {
                 className='flex items-center justify-between'
               >
                 <span>{card.name}</span>
-                <Badge
-                  className='bg-[hsl(var(--frame))] hover:bg-[hsl(var(--frame))]/80 text-[hsl(var(--frame-foreground))]'
-                  style={{
-                    // @ts-ignore
-                    '--frame': getFrametypeColors(card).bg,
-                    '--frame-foreground': getFrametypeColors(card).text,
-                  }}
-                >
-                  {snakeCaseToCapitalized(card.frameType)}
-                </Badge>
+                <FrameTypeBadge card={card} />
               </CommandItem>
             ))}
           </CommandGroup>

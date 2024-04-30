@@ -57,7 +57,7 @@ export function fuzzyMatch(target: string, query: string) {
   return false; // Not all characters were found in order
 }
 
-export function getFrametypeColors(card: Card) {
+export function getFrametypeColors(card: Pick<Card, 'frameType' | 'slug'>) {
   if (card.slug === 'slifer_the_sky_dragon')
     return {
       bg: '0 100% 50%',

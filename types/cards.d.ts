@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export type CardType =
   | 'effect_monster'
   | 'fusion_monster'
@@ -147,3 +145,18 @@ export interface Card {
   cardPrices: CardPrice[];
   banlistInfo?: BanlistInfo;
 }
+
+export interface LibraryCard extends Card {
+  quantity: number;
+  tradeable: boolean;
+}
+
+export type LibraryCardSummary = {
+  id: string;
+  name: string;
+  slug: string;
+  type: CardType;
+  frameType: FrameType;
+  quantity: number;
+  tradeable: boolean;
+};

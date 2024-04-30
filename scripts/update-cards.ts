@@ -207,10 +207,10 @@ async function updateCards(): Promise<void> {
         log(chalk.yellow(`Blob already exists: ${existingBlob.url}`));
         imageUrl = existingBlob.url;
       } else {
-        // imageUrl = await uploadImageToVercel(
-        //   apiCard.card_images[0].image_url,
-        //   `${apiCard.id}.jpg`,
-        // );
+        imageUrl = await uploadImageToVercel(
+          apiCard.card_images[0].image_url,
+          `${apiCard.id}.jpg`,
+        );
       }
 
       return {
