@@ -4,16 +4,17 @@ export type FieldErrors<T> = {
   [K in keyof T]?: string[];
 };
 
-export type ActionState<TO> = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type ActionState<TI, TO> = {
   error?: string | null;
   data?: TO;
 };
 
 export function createSafeAction<TI, TO>(
   schema: z.Schema<TI>,
-  handler: (data: TI) => Promise<ActionState<TO>>,
+  handler: (data: TI) => Promise<ActionState<TI, TO>>,
 ) {
-  return async (data: TI): Promise<ActionState<TO>> => {
+  return async (data: TI): Promise<ActionState<TI, TO>> => {
     const validated = schema.safeParse(data);
     if (!validated.success) {
       return {
