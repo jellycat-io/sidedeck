@@ -19,7 +19,9 @@ export function CardTooltip({ card }: CardTooltipProps) {
       {card && (
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>{card.name}</TooltipTrigger>
+            <TooltipTrigger asChild>
+              <span>{card.name}</span>
+            </TooltipTrigger>
             <TooltipContent className='p-0 bg-transparent'>
               <CardImage src={card.imageUrl} alt={card.name} width={250} />
             </TooltipContent>
