@@ -67,6 +67,17 @@ export async function getCardById(id: string) {
   }
 }
 
+export async function getCardNameById(id: string) {
+  try {
+    const card = await getCardById(id);
+    return card?.name;
+  } catch (error) {
+    throw new Error(
+      `Error getting card name by id: ${id}, ${error instanceof Error ? error.message : error}`,
+    );
+  }
+}
+
 export async function getCardByName(name: string) {
   try {
     const cards = loadCards();
@@ -90,13 +101,13 @@ export async function getCardsByQuery(query: string) {
   }
 }
 
-export async function getLastUserCards(userId: string) {
+export async function getLibraryCards(userId: string, limit?: number) {
   try {
     const cards = await db.userCard.findMany({
       where: {
         userId,
       },
-      take: 5,
+      take: limit,
       orderBy: {
         createdAt: 'desc',
       },
@@ -105,7 +116,7 @@ export async function getLastUserCards(userId: string) {
     return cards;
   } catch (error) {
     throw new Error(
-      `Error getting last user cards: ${userId}, ${error instanceof Error ? error.message : error}`,
+      `Error getting user cards: ${userId}, ${error instanceof Error ? error.message : error}`,
     );
   }
 }

@@ -1,6 +1,6 @@
 import { BadgeEuro } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { getLastUserCardsAction } from '@/actions/platform/dashboard/get-last-user-cards';
 import { FrameTypeBadge } from '@/components/frame-type-badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -11,16 +11,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useFetch } from '@/hooks/use-fetch';
+import { useLibrary } from '@/hooks/use-library';
+import { LibraryCard } from '@/types/cards';
 
 import { DashboardPanel } from './dashboard-panel';
 
-interface LastCardsPanelProps {
-  userId: string;
-}
+export function LastCardsPanel() {
+  const [cards, setCards] = useState<LibraryCard[]>([]);
+  const { cards: libraryCards, loading, getLastCards } = useLibrary();
 
-export function LastCardsPanel({ userId }: LastCardsPanelProps) {
-  const { data: cards, loading } = useFetch(getLastUserCardsAction, { userId });
+  useEffect(() => {
+    setCards(getLastCards());
+  }, [libraryCards, getLastCards]);
 
   if (!cards?.length || loading) {
     return <Skeleton className='h-[260px]' />;
@@ -28,9 +30,9 @@ export function LastCardsPanel({ userId }: LastCardsPanelProps) {
 
   return (
     <DashboardPanel
-      title='Last cards added'
+      title='Last Library updates'
       link='/library'
-      linkLabel='View all cards'
+      linkLabel='Browse library'
     >
       <Table>
         <TableHeader>

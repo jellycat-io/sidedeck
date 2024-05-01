@@ -1,12 +1,19 @@
-import { Link, Star, Swords, Shield } from 'lucide-react';
+import { Link, Star, Swords, Shield, Plus, Archive } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
+import { addLibraryCardAction } from '@/actions/platform/library/add-library-card';
 import { CardImage } from '@/components/card-image';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetFooter } from '@/components/ui/sheet';
+import { useAction } from '@/hooks/use-action';
+import { useCurrentUserId } from '@/hooks/use-current-user';
+import { useLibrary } from '@/hooks/use-library';
 import { snakeCaseToCapitalized } from '@/lib/utils';
 import { Card } from '@/types/cards';
+
+import { ActionButton } from './action-button';
 
 interface CardSheetProps {
   card: Card;
@@ -15,9 +22,43 @@ interface CardSheetProps {
 }
 
 export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
+  const [mounted, setMounted] = useState(false);
+  const userId = useCurrentUserId();
+  const { cards, refreshLibrary } = useLibrary();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const { execute: addLibraryCard, loading: addingCard } = useAction(
+    addLibraryCardAction,
+    {
+      onError: (error) => {
+        toast.error(error);
+      },
+      onSuccess: ({ success }) => {
+        refreshLibrary();
+        toast.success(success);
+      },
+    },
+  );
+
   function handleOpenChange(open: boolean) {
     onOpenChange(open);
   }
+
+  function handleLibraryAdd() {
+    addLibraryCard({
+      cardId: card.id,
+      userId,
+    });
+  }
+
+  if (!mounted) {
+    return null;
+  }
+
+  const libraryCard = cards.find((libraryCard) => libraryCard.id === card.id);
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
@@ -34,6 +75,18 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
                   <p className='text-sm text-muted-foreground'>
                     {`ID: ${card.id}`}
                   </p>
+                  {libraryCard && (
+                    <Badge
+                      variant='outline'
+                      className='flex items-center gap-x-2 py-2'
+                    >
+                      <Archive className='h-4 w-4' />
+                      Owned
+                      <div className='bg-primary text-primary-foreground flex justify-center items-center rounded-full h-4 w-4'>
+                        {libraryCard.quantity}
+                      </div>
+                    </Badge>
+                  )}
                 </div>
                 <p>{snakeCaseToCapitalized(card.type)}</p>
               </div>
@@ -127,9 +180,13 @@ export function CardSheet({ card, open, onOpenChange }: CardSheetProps) {
           </div>
         </div>
         <SheetFooter className='pt-4'>
-          <Button variant='outline' onClick={() => onOpenChange(false)}>
-            Close
-          </Button>
+          <ActionButton
+            onClick={() => handleLibraryAdd()}
+            loading={addingCard}
+            icon={<Plus className='h-4 w-4' />}
+          >
+            Add to library
+          </ActionButton>
         </SheetFooter>
       </SheetContent>
     </Sheet>

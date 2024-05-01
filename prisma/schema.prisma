@@ -21,7 +21,6 @@ model UserCard {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, cardId])
   @@index([cardId])
 }
 

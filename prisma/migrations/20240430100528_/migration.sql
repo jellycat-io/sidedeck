@@ -72,9 +72,6 @@ CREATE TABLE "PasswordResetToken" (
 CREATE INDEX "UserCard_cardId_idx" ON "UserCard"("cardId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserCard_userId_cardId_key" ON "UserCard"("userId", "cardId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex

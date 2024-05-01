@@ -149,6 +149,8 @@ export interface Card {
 export interface LibraryCard extends Card {
   quantity: number;
   tradeable: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export type LibraryCardSummary = {
