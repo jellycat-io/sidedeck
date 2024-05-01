@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/table';
 import { LibraryCard } from '@/types/cards';
 
+import { LibraryTableActions } from './library-table-actions';
+
 export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'name',
@@ -68,21 +70,25 @@ export const columns: ColumnDef<LibraryCard>[] = [
       </div>
     ),
   },
+  {
+    id: 'actions',
+    header: '',
+    cell: (cell) => <LibraryTableActions card={cell.row.original} />,
+  },
 ];
 
 interface LibraryTableProps {
   data: LibraryCard[];
-  loading: boolean;
 }
 
-export function LibraryTable({ data, loading }: LibraryTableProps) {
+export function LibraryTable({ data }: LibraryTableProps) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (!data.length || loading) {
+  if (!data.length) {
     return <Skeleton className='h-[580px]' />;
   }
 
