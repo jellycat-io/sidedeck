@@ -13,11 +13,12 @@ import {
 import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
 // Construct the path to the JSON file
-const CARDS_JSON_PATH = path.join(process.cwd(), '/app/cards.json');
+const CARDS_JSON_PATH = path.join(process.cwd(), 'app/cards.json');
 
 let cachedCards: ApiCard[] = [];
 
 async function loadCards(): Promise<ApiCard[]> {
+  console.log(CARDS_JSON_PATH);
   try {
     if (cachedCards.length > 0) {
       console.log(chalk.blue(`Using cached cards data...`));
@@ -25,8 +26,7 @@ async function loadCards(): Promise<ApiCard[]> {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const file = await fs.readFile(CARDS_JSON_PATH, 'utf8');
-    const data = JSON.parse(file);
+    const data = await fs.readFile(CARDS_JSON_PATH, 'utf8');
     console.log(chalk.green('Cards data loaded.'));
 
     console.log(chalk.blue('Caching cards data...'));
