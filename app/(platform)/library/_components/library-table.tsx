@@ -1,139 +1,170 @@
 'use client';
 
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { formatDate } from 'date-fns';
-import { BadgeEuro } from 'lucide-react';
+import { ColumnDef } from '@tanstack/react-table';
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
+import { removeLibraryCardAction } from '@/actions/platform/library/remove-library-card';
 import { CardTooltip } from '@/components/card-tooltip';
+import { DataTable } from '@/components/data-table';
+import { DataTableColumnHeader } from '@/components/data-table-column-header';
 import { FrameTypeBadge } from '@/components/frame-type-badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useAction } from '@/hooks/use-action';
+import { useCurrentUserId } from '@/hooks/use-current-user';
+import { useLibrary } from '@/hooks/use-library';
+import { formatDateFromNow } from '@/lib/utils';
 import { LibraryCard } from '@/types/cards';
 
-import { LibraryTableActions } from './library-table-actions';
+import { LibraryCardSheet } from './library-card-sheet';
 
 export const columns: ColumnDef<LibraryCard>[] = [
   {
+    id: 'select',
+    header: ({ table }) => (
+      <div className='flex justify-center items-center'>
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label='Select all'
+        />
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className='flex justify-center items-center'>
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label='Select row'
+        />
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Name' />
+    ),
     cell: (cell) => <CardTooltip card={cell.row.original} />,
   },
   {
     accessorKey: 'type',
-    header: 'Type',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Type' />
+    ),
     cell: (cell) => <FrameTypeBadge card={cell.row.original} />,
   },
   {
     accessorKey: 'quantity',
-    header: 'Quantity',
-    cell: (cell) => (
-      <div className='text-center'>{cell.row.original.quantity}</div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Quantity' />
     ),
-  },
-  {
-    accessorKey: 'tradeable',
-    header: 'Tradeable',
-    cell: (cell) =>
-      cell.row.original.tradeable && (
-        <div className='flex justify-center items-center'>
-          <BadgeEuro className='h-5 w-5 text-emerald-400' />
-        </div>
-      ),
+    cell: (cell) => (
+      <Badge variant='outline'>x {cell.row.original.quantity}</Badge>
+    ),
   },
   {
     accessorKey: 'createdAt',
-    header: 'Added at',
-    cell: (cell) => (
-      <div className='text-center'>
-        {formatDate(cell.row.original.createdAt, 'dd/MM/yyyy')}
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Added' />
     ),
+    cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
   },
   {
     accessorKey: 'updatedAt',
-    header: 'Updated at',
-    cell: (cell) => (
-      <div className='text-center'>
-        {formatDate(cell.row.original.updatedAt, 'dd/MM/yyyy')}
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Updated' />
     ),
-  },
-  {
-    id: 'actions',
-    header: '',
-    cell: (cell) => <LibraryTableActions card={cell.row.original} />,
+    cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
   },
 ];
 
 interface LibraryTableProps {
   data: LibraryCard[];
+  loading?: boolean;
 }
 
-export function LibraryTable({ data }: LibraryTableProps) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+export function LibraryTable({ data, loading }: LibraryTableProps) {
+  const [selectedCard, setSelectedCard] = useState<LibraryCard | null>(null);
+  const [openSheet, setOpenSheet] = useState(false);
 
-  if (!data.length) {
-    return <Skeleton className='h-[580px]' />;
+  const userId = useCurrentUserId();
+  const { refreshLibrary } = useLibrary();
+  const { execute: removeCards, loading: removingCards } = useAction(
+    removeLibraryCardAction,
+    {
+      onError: toast.error,
+      onSuccess: ({ success }) => {
+        toast.success(success);
+        refreshLibrary();
+      },
+    },
+  );
+
+  function handleRemoveCards(cards: LibraryCard[]) {
+    if (!cards.length) return;
+
+    const cardIds = cards.map((card) => card.id);
+
+    removeCards({
+      userId,
+      cardIds,
+    });
+  }
+
+  function handleRemoveCard(card: LibraryCard) {
+    handleRemoveCards([card]);
   }
 
   return (
-    <div className='rounded-md border w-full'>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className='h-24 text-center'>
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+    <>
+      <DataTable
+        columns={columns}
+        data={data}
+        pagination
+        loading={loading}
+        onRowClick={(card) => {
+          setSelectedCard(card);
+          setOpenSheet(true);
+        }}
+        batchActions={[
+          {
+            label: 'Remove cards',
+            icon: <Trash2 className='h-4 w-4' />,
+            destructive: true,
+            loading: removingCards,
+            action: handleRemoveCards,
+          },
+        ]}
+        rowActions={[
+          {
+            label: 'Remove card',
+            icon: <Trash2 className='h-4 w-4' />,
+            destructive: true,
+            loading: removingCards,
+            action: handleRemoveCard,
+          },
+        ]}
+      />
+      {!!selectedCard && (
+        <LibraryCardSheet
+          cardId={selectedCard.id}
+          open={openSheet}
+          onOpenChange={(open) => {
+            setOpenSheet(open);
+            if (!open) {
+              setSelectedCard(null);
+            }
+          }}
+        />
+      )}
+    </>
   );
 }

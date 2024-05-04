@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 import { getLibraryCardsAction } from '@/actions/platform/library/get-library-cards';
 import { useCurrentUserId } from '@/hooks/use-current-user';
@@ -12,6 +12,8 @@ interface LibraryContextValue {
   loading: boolean;
   refreshLibrary: () => void;
   getLastCards: () => LibraryCard[];
+  getLibraryCard: (id: string) => LibraryCard | undefined;
+  getIssueCardId: (issueId: string) => string | undefined;
 }
 
 export const LibraryContext = createContext<LibraryContextValue>({
@@ -19,6 +21,8 @@ export const LibraryContext = createContext<LibraryContextValue>({
   loading: false,
   refreshLibrary: () => {},
   getLastCards: () => [],
+  getLibraryCard: () => undefined,
+  getIssueCardId: () => undefined,
 });
 
 export function LibraryProvider({ children }: { children: React.ReactNode }) {
@@ -47,9 +51,32 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
     return cards.slice(0, 5);
   }
 
+  const getLibraryCard = useCallback(
+    (id: string) => cards.find((card) => card.id === id),
+    [cards],
+  );
+
+  const getIssueCardId = useCallback(
+    (issueId: string) => {
+      const card = cards.find((card) =>
+        card.issues.some((issue) => issue.id === issueId),
+      );
+
+      return card?.id;
+    },
+    [cards],
+  );
+
   return (
     <LibraryContext.Provider
-      value={{ cards, loading, refreshLibrary, getLastCards }}
+      value={{
+        cards,
+        loading,
+        refreshLibrary,
+        getLastCards,
+        getLibraryCard,
+        getIssueCardId,
+      }}
     >
       {children}
     </LibraryContext.Provider>

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-import { getCards, getLibraryCards } from '@/data/card';
+import { getCards, getUserCards, toLibraryCard } from '@/data/card';
 import { FetchState, createSafeFetch } from '@/lib/create-safe-fetch';
 import { GetLibraryCardsSchema } from '@/schemas/card';
 import { LibraryCard } from '@/types/cards';
@@ -15,9 +15,9 @@ async function handler({
   limit,
 }: GetLibraryCardsInput): Promise<GetLibraryCardsResponse> {
   try {
-    const cardData = await getCards();
+    const cardsData = await getCards();
 
-    const userCards = await getLibraryCards(userId, limit);
+    const userCards = await getUserCards(userId, limit);
 
     if (!userCards) {
       return {
@@ -25,7 +25,7 @@ async function handler({
       };
     }
 
-    const libraryCards: LibraryCard[] = cardData
+    const libraryCards: LibraryCard[] = cardsData
       .filter((card) =>
         userCards.some((userCard) => userCard.cardId === card.id),
       )
@@ -33,13 +33,13 @@ async function handler({
         const userCard = userCards.find(
           (userCard) => userCard.cardId === card.id,
         );
-        return {
-          ...card,
-          createdAt: userCard ? userCard.createdAt : '',
-          updatedAt: userCard ? userCard.updatedAt : '',
-          quantity: userCard ? userCard.quantity : 0,
-          tradeable: userCard ? userCard.tradeable : false,
-        };
+        if (!userCard) throw new Error('User card not found');
+
+        const libraryCard = toLibraryCard(card, userCard);
+
+        if (!libraryCard) throw new Error('Library card not found');
+
+        return libraryCard;
       });
 
     // Sort by updatedAt desc

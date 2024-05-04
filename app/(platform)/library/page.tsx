@@ -8,8 +8,8 @@ export default function DashboardPage() {
   const { cards } = useLibrary();
 
   return (
-    <div className='space-y-8'>
-      <h1 className='text-2xl'>Library</h1>
+    <div className='flex flex-col gap-y-1'>
+      <h1 className='text-xl font-semibold'>Library</h1>
       <LibraryTable data={cards} />
     </div>
   );

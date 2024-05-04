@@ -4,7 +4,7 @@ import { Github } from 'lucide-react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-import { CardFinder } from '@/components/card-finder';
+import { CardFinder } from '@/components/card-finder/card-finder';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@/components/user-button';

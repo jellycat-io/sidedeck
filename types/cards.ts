@@ -1,3 +1,7 @@
+import { z } from 'zod';
+
+import { UserCardSchema } from '@/schemas/card';
+
 export type CardType =
   | 'effect_monster'
   | 'fusion_monster'
@@ -100,7 +104,58 @@ export type CardRace =
   | 'wyrm'
   | 'zombie';
 
-interface CardSet {
+export type CardRarityCode =
+  | 'C'
+  | 'R'
+  | 'SR'
+  | 'HFR'
+  | 'UR'
+  | 'URP'
+  | 'UtR'
+  | 'ScR'
+  | 'QSrR'
+  | 'UScR'
+  | 'ScUR'
+  | 'PScR'
+  | 'PR'
+  | 'SFR'
+  | 'SLR'
+  | 'GR'
+  | 'GUR';
+
+export type CardRarityName =
+  | 'Common'
+  | 'Rare'
+  | 'Super Rare'
+  | 'Holographic Foil Rare'
+  | 'Ultra Rare'
+  | "Ultra Rare Pharaoh's Rare"
+  | 'Ultimate Rare'
+  | 'Secret Rare'
+  | 'Quarter Century Secret Rare'
+  | 'Ultra-Secret Rare'
+  | 'Secret-Ultra Rare'
+  | 'Prismatic Secret Rare'
+  | 'Parallel Rare'
+  | 'Starfoil Rare'
+  | 'Starlight Rare'
+  | 'Ghost Rare'
+  | 'Ghost Ultra Rare';
+
+export const CARD_LANGUAGES = [
+  'en',
+  'de',
+  'fr',
+  'it',
+  'es',
+  'pt',
+  'jp',
+  'kr',
+] as const;
+
+export type CardLanguage = (typeof CARD_LANGUAGES)[number];
+
+export interface ApiCardSet {
   set_name: string;
   set_code: string;
   set_rarity: string;
@@ -108,7 +163,7 @@ interface CardSet {
   set_price: string;
 }
 
-interface CardPrice {
+export interface ApiCardPrice {
   cardmarket_price: string;
   tcgplayer_price: string;
   ebay_price: string;
@@ -118,13 +173,13 @@ interface CardPrice {
 
 type BanStatus = 'Banned' | 'Limited' | 'Semi-Limited';
 
-interface BanlistInfo {
+export interface BanlistInfo {
   ban_tcg: BanStatus;
   ban_ocg: BanStatus;
   ban_goat: BanStatus;
 }
 
-export interface Card {
+export interface ApiCard {
   id: string;
   name: string;
   slug: string;
@@ -141,16 +196,34 @@ export interface Card {
   attribute?: MonsterAttribute;
   archetype?: string;
   imageUrl: string;
-  cardSets: CardSet[];
-  cardPrices: CardPrice[];
+  cardSets: ApiCardSet[];
+  cardPrices: ApiCardPrice[];
   banlistInfo?: BanlistInfo;
 }
 
-export interface LibraryCard extends Card {
+export type UserCard = z.infer<typeof UserCardSchema>;
+
+export interface LibraryCard
+  extends Omit<ApiCard, 'id' | 'cardSets' | 'cardPrices'>,
+    UserCard {
   quantity: number;
-  tradeable: boolean;
-  createdAt: string | Date;
-  updatedAt: string | Date;
+}
+
+export interface LibraryCardIssue {
+  id: string;
+  language: CardLanguage;
+  quantity: number;
+  tradeable?: boolean;
+  rarity: CardRarityCode;
+  set: LibraryCardSet;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LibraryCardSet {
+  setName: string;
+  setCode: string;
+  setPrice: string;
 }
 
 export type LibraryCardSummary = {

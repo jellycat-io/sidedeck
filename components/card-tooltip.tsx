@@ -7,10 +7,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Card } from '@/types/cards';
+import { LibraryCard } from '@/types/cards';
 
 interface CardTooltipProps {
-  card: Card;
+  card: LibraryCard;
 }
 
 export function CardTooltip({ card }: CardTooltipProps) {

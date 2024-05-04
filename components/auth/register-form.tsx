@@ -55,8 +55,6 @@ export function RegisterForm() {
     setError('');
     setSuccess('');
 
-    console.log(values);
-
     register(values);
   };
 

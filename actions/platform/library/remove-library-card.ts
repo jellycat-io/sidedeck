@@ -18,7 +18,7 @@ async function handler({
   const res = await db.userCard.deleteMany({
     where: {
       userId,
-      cardId: {
+      id: {
         in: cardIds,
       },
     },

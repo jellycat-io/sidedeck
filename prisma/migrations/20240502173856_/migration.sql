@@ -3,10 +3,9 @@ CREATE TABLE "UserCard" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "cardId" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL DEFAULT 1,
-    "tradeable" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "issues" JSONB[],
 
     CONSTRAINT "UserCard_pkey" PRIMARY KEY ("id")
 );
