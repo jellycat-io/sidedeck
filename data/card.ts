@@ -22,6 +22,11 @@ async function loadCards(): Promise<ApiCard[]> {
     console.log(chalk.blue(`Loading cards data...`));
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_APP_URL}/cards.json`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     );
     console.log(chalk.green('Cards data loaded.'));
 

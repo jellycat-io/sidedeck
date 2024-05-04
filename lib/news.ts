@@ -1,6 +1,6 @@
+import axios from 'axios';
 import * as cheerio from 'cheerio';
 import * as datefns from 'date-fns';
-import fetch from 'node-fetch';
 
 export interface Article {
   title: string;
@@ -12,8 +12,8 @@ const SOURCE_DOMAIN = 'https://www.yugioh-card.com';
 
 export async function generateNewsFeed(): Promise<Article[]> {
   try {
-    const response = await fetch('https://www.yugioh-card.com/en/news');
-    const $ = cheerio.load(await response.text());
+    const response = await axios.get('https://www.yugioh-card.com/en/news');
+    const $ = cheerio.load(await response.data);
 
     const feed: Article[] = [];
 
