@@ -10,6 +10,7 @@ const nextConfig = {
       },
     ],
   },
+  output: 'standalone',
   experimental: {
     outputFileTracingRoot: path.join(process.cwd(), 'cards.json'),
   },
