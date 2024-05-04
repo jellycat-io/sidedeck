@@ -15,6 +15,12 @@ async function handler({
   limit,
 }: GetLibraryCardsInput): Promise<GetLibraryCardsResponse> {
   try {
+    if (!userId) {
+      return {
+        error: 'Unauthorized',
+      };
+    }
+
     const cardsData = await getCards();
 
     const userCards = await getUserCards(userId, limit);

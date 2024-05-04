@@ -14,7 +14,7 @@ import { MobileSidebar } from './mobile-sidebar';
 export function Navbar() {
   const session = useSession();
 
-  if (!session.data?.user.id) {
+  if (!session) {
     return null;
   }
 
@@ -28,7 +28,7 @@ export function Navbar() {
         <div className='w-full flex justify-between md:justify-end md:space-x-4'>
           <CardFinder />
           <div className='flex space-x-4 items-center'>
-            <UserButton user={session.data.user} />
+            <UserButton user={session.data?.user} />
             <Link
               href='https://github.com/jellycat-io/sidedeck'
               target='_blank'

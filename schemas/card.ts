@@ -132,7 +132,7 @@ export const GetCardSchema = z.object({
 });
 
 export const GetLibraryCardsSchema = z.object({
-  userId: z.string(),
+  userId: z.string().optional(),
   limit: z.number().optional(),
 });
 
