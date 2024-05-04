@@ -13,7 +13,7 @@ import {
 import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
 // Construct the path to the JSON file
-const CARDS_JSON_PATH = path.join(process.cwd(), 'app/cards.json');
+const CARDS_JSON_PATH = path.join(process.cwd(), 'cards.json');
 
 let cachedCards: ApiCard[] = [];
 
