@@ -1,3 +1,4 @@
+import axios from 'axios';
 import chalk from 'chalk';
 
 import { db } from '@/lib/db';
@@ -19,11 +20,13 @@ async function loadCards(): Promise<ApiCard[]> {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/cards.json`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_APP_URL}/cards.json`,
+    );
     console.log(chalk.green('Cards data loaded.'));
 
     console.log(chalk.blue('Caching cards data...'));
-    cachedCards = await data.json();
+    cachedCards = await res.data;
     console.log(chalk.green('Cards data cached.'));
 
     return cachedCards;
