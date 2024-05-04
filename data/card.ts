@@ -44,7 +44,7 @@ async function loadCards(): Promise<ApiCard[]> {
 
 export async function getCards() {
   try {
-    return loadCards();
+    return await loadCards();
   } catch (error) {
     throw new Error(
       `Error getting cards: ${error instanceof Error ? error.message : error}`,
