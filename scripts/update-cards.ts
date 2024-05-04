@@ -9,7 +9,7 @@ import path from 'path';
 import { toSnakeCase } from '@/lib/utils';
 import {
   BanlistInfo,
-  Card,
+  ApiCard,
   CardRace,
   CardType,
   FrameType,
@@ -93,7 +93,7 @@ async function fetchCards(): Promise<ApiCardData[]> {
   }
 }
 
-async function loadStoredCards(): Promise<Card[]> {
+async function loadStoredCards(): Promise<ApiCard[]> {
   if (!existsSync(CARDS_JSON_PATH)) {
     return [];
   }
@@ -102,7 +102,7 @@ async function loadStoredCards(): Promise<Card[]> {
   return JSON.parse(fileData.toString());
 }
 
-async function saveCards(cards: Card[]): Promise<void> {
+async function saveCards(cards: ApiCard[]): Promise<void> {
   log(chalk.blue(`Saving cards...`));
   writeFileSync(CARDS_JSON_PATH, JSON.stringify(cards, null, 2));
   log(chalk.green(`Cards saved!`));
@@ -198,7 +198,7 @@ async function updateCards(): Promise<void> {
       process.exit(0);
     }
 
-    const uploadPromises: Promise<Card>[] = newCards.map(async (apiCard) => {
+    const uploadPromises: Promise<ApiCard>[] = newCards.map(async (apiCard) => {
       const existingBlob = await checkBlobExists(blobs, `${apiCard.id}.jpg`);
 
       let imageUrl = '';

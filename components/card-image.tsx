@@ -27,7 +27,7 @@ export function CardImage({ src, alt, width }: CardImageProps) {
         height={height}
         quality={100}
         priority
-        onLoadingComplete={handleLoadingComplete}
+        onLoad={handleLoadingComplete}
         sizes={`(min-width: 640px) ${width}px, 100vw`}
         style={{
           display: loading ? 'none' : 'block',

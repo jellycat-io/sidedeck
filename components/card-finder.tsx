@@ -18,15 +18,15 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { useDebounce } from '@/hooks/use-debounce';
-import { Card } from '@/types/cards';
+import { ApiCard } from '@/types/cards';
 
 const PAGE_SIZE = 20;
 
 export function CardFinder() {
   const [openFinder, setOpenFinder] = useState(false);
   const [openCardSheet, setOpenCardSheet] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [cards, setCards] = useState<Card[]>([]);
+  const [selectedCard, setSelectedCard] = useState<ApiCard | null>(null);
+  const [cards, setCards] = useState<ApiCard[]>([]);
   const [totalQueryCount, setTotalQueryCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);

@@ -14,14 +14,11 @@ model UserCard {
   id        String   @id @default(cuid())
   userId    String
   cardId    String
-  quantity  Int      @default(1)
-  tradeable Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  issues    Json[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, cardId])
   @@index([cardId])
 }
 

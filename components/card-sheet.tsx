@@ -6,10 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetFooter } from '@/components/ui/sheet';
 import { snakeCaseToCapitalized } from '@/lib/utils';
-import { Card } from '@/types/cards';
+import { ApiCard } from '@/types/cards';
 
 interface CardSheetProps {
-  card: Card;
+  card: ApiCard;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }

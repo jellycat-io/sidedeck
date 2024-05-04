@@ -2,7 +2,6 @@
 
 import { DoorOpen, Moon, Palette, Sun, SunMoon, User } from 'lucide-react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 
 import { LogoutButton } from '@/components/auth/logout-button';
@@ -22,16 +21,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ExtendedUser } from '@/next-auth';
 
-export function UserButton() {
-  const session = useSession();
+interface UserButtonProps {
+  user: ExtendedUser;
+}
+
+export function UserButton({ user }: UserButtonProps) {
   const { theme, setTheme } = useTheme();
-
-  if (!session.data) {
-    return null;
-  }
-
-  const { user } = session.data;
 
   return (
     <DropdownMenu>

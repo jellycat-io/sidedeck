@@ -1,7 +1,13 @@
 import { type ClassValue, clsx } from 'clsx';
+import { formatDistanceToNow } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
-import { Card } from '@/types/cards';
+import {
+  CardLanguage,
+  CardRarityCode,
+  CardRarityName,
+  LibraryCard,
+} from '@/types/cards';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,7 +63,9 @@ export function fuzzyMatch(target: string, query: string) {
   return false; // Not all characters were found in order
 }
 
-export function getFrametypeColors(card: Pick<Card, 'frameType' | 'slug'>) {
+export function getFrametypeColors(
+  card: Pick<LibraryCard, 'frameType' | 'slug'>,
+) {
   if (card.slug === 'slifer_the_sky_dragon')
     return {
       bg: '0 100% 50%',
@@ -136,4 +144,116 @@ export function getFrametypeColors(card: Pick<Card, 'frameType' | 'slug'>) {
         text: '0 0% 3.9%',
       };
   }
+}
+
+export function keyToLanguage(key: CardLanguage): string {
+  switch (key) {
+    case 'en':
+      return 'English';
+    case 'de':
+      return 'German';
+    case 'fr':
+      return 'French';
+    case 'it':
+      return 'Italian';
+    case 'es':
+      return 'Spanish';
+    case 'pt':
+      return 'Portuguese';
+    case 'jp':
+      return 'Japanese';
+    case 'kr':
+      return 'Korean';
+  }
+}
+
+export function codeToRarityName(code: CardRarityCode): CardRarityName {
+  switch (code) {
+    case 'C':
+      return 'Common';
+    case 'R':
+      return 'Rare';
+    case 'SR':
+      return 'Super Rare';
+    case 'HFR':
+      return 'Holographic Foil Rare';
+    case 'UR':
+      return 'Ultra Rare';
+    case 'URP':
+      return "Ultra Rare Pharaoh's Rare";
+    case 'UtR':
+      return 'Ultimate Rare';
+    case 'ScR':
+      return 'Secret Rare';
+    case 'QSrR':
+      return 'Quarter Century Secret Rare';
+    case 'UScR':
+      return 'Ultra-Secret Rare';
+    case 'ScUR':
+      return 'Secret-Ultra Rare';
+    case 'PScR':
+      return 'Prismatic Secret Rare';
+    case 'PR':
+      return 'Parallel Rare';
+    case 'SFR':
+      return 'Starfoil Rare';
+    case 'SLR':
+      return 'Starlight Rare';
+    case 'GR':
+      return 'Ghost Rare';
+    case 'GUR':
+      return 'Ghost Ultra Rare';
+  }
+}
+
+export function rarityNameToCode(name: CardRarityName): CardRarityCode {
+  switch (name) {
+    case 'Common':
+      return 'C';
+    case 'Rare':
+      return 'R';
+    case 'Super Rare':
+      return 'SR';
+    case 'Holographic Foil Rare':
+      return 'HFR';
+    case 'Ultra Rare':
+      return 'UR';
+    case "Ultra Rare Pharaoh's Rare":
+      return 'URP';
+    case 'Ultimate Rare':
+      return 'UtR';
+    case 'Secret Rare':
+      return 'ScR';
+    case 'Quarter Century Secret Rare':
+      return 'QSrR';
+    case 'Ultra-Secret Rare':
+      return 'UScR';
+    case 'Secret-Ultra Rare':
+      return 'ScUR';
+    case 'Prismatic Secret Rare':
+      return 'PScR';
+    case 'Parallel Rare':
+      return 'PR';
+    case 'Starfoil Rare':
+      return 'SFR';
+    case 'Starlight Rare':
+      return 'SLR';
+    case 'Ghost Rare':
+      return 'GR';
+    case 'Ghost Ultra Rare':
+      return 'GUR';
+  }
+}
+
+export function sanitizeRarityCode(code: string): CardRarityCode {
+  const safeCode = code.replace(/[()]/g, '') as CardRarityCode;
+  return safeCode;
+}
+
+export function formatDateFromNow(date: string | Date): string {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  return formatDistanceToNow(dateObj, {
+    addSuffix: true,
+  });
 }

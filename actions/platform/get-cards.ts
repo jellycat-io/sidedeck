@@ -4,12 +4,12 @@ import { z } from 'zod';
 
 import { getCards } from '@/data/card';
 import { GetCardsSchema } from '@/schemas/card';
-import { Card } from '@/types/cards';
+import { ApiCard } from '@/types/cards';
 
 export type GetCardsInput = z.infer<typeof GetCardsSchema>;
 export type GetCardsResponse = {
   totalCount: number;
-  cards: Card[];
+  cards: ApiCard[];
 };
 
 export async function getCardsAction({

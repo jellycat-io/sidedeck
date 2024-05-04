@@ -18,8 +18,6 @@ async function handler(
 ): Promise<ActionState<RegisterInput, RegisterResponse>> {
   const validated = RegisterSchema.safeParse(values);
 
-  console.log(validated);
-
   if (!validated.success) return { error: 'Invalid credentials.' };
 
   const { name, email, password } = validated.data;
