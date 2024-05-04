@@ -2,12 +2,12 @@
 
 import { useSession } from 'next-auth/react';
 
-export function useCurrentUserId() {
+export function useCurrentUserId(): string | undefined {
   const session = useSession();
 
-  if (!session.data?.user.id) {
+  if (!session) {
     throw new Error('Unauthorized');
   }
 
-  return session.data.user.id;
+  return session.data?.user.id;
 }

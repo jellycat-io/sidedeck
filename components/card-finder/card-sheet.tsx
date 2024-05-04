@@ -87,7 +87,7 @@ export function CardSheet({
     onOpenChange(open);
   }
 
-  if (!mounted) {
+  if (!userId || !mounted) {
     return null;
   }
 

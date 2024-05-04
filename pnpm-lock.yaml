@@ -65,6 +65,9 @@ dependencies:
   '@vercel/blob':
     specifier: ^0.23.2
     version: 0.23.2
+  axios:
+    specifier: ^1.6.8
+    version: 1.6.8
   bcryptjs:
     specifier: ^2.4.3
     version: 2.4.3
@@ -633,6 +636,9 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
+      '@floating-ui/dom': 1.6.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
       react-hook-form: 7.51.3(react@18.2.0)
     dev: false
 
@@ -2335,6 +2341,16 @@ packages:
     dependencies:
       follow-redirects: 1.15.6
       is-buffer: 1.1.6
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+    dependencies:
+      follow-redirects: 1.15.6
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -6152,6 +6168,10 @@ packages:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
+    dev: false
+
+  /proxy-from-env@1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
     dev: false
 
   /pseudomap@1.0.2:

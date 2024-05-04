@@ -1,7 +1,5 @@
+import axios from 'axios';
 import chalk from 'chalk';
-
-import fs from 'fs';
-import path from 'path';
 
 import { db } from '@/lib/db';
 import { fuzzyMatch } from '@/lib/utils';
@@ -12,12 +10,9 @@ import {
 } from '@/schemas/card';
 import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
-// Construct the path to the JSON file
-const CARDS_JSON_PATH = path.join(process.cwd(), 'data/cards.json');
-
 let cachedCards: ApiCard[] = [];
 
-function loadCards(): ApiCard[] {
+async function loadCards(): Promise<ApiCard[]> {
   try {
     if (cachedCards.length > 0) {
       console.log(chalk.blue(`Using cached cards data...`));
@@ -25,10 +20,18 @@ function loadCards(): ApiCard[] {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const data = fs.readFileSync(CARDS_JSON_PATH, 'utf8');
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_APP_URL}/cards.json`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
     console.log(chalk.green('Cards data loaded.'));
+
     console.log(chalk.blue('Caching cards data...'));
-    cachedCards = JSON.parse(data);
+    cachedCards = await res.data;
     console.log(chalk.green('Cards data cached.'));
 
     return cachedCards;
@@ -51,7 +54,7 @@ export async function getCards() {
 
 export async function getCardsByIds(ids: string[]) {
   try {
-    const cards = loadCards();
+    const cards = await loadCards();
     return cards.filter((card) => ids.includes(card.id));
   } catch (error) {
     throw new Error(
@@ -62,7 +65,7 @@ export async function getCardsByIds(ids: string[]) {
 
 export async function getCardById(id: string) {
   try {
-    const cards = loadCards();
+    const cards = await loadCards();
     const card = cards.find((card) => card.id === id);
     return card;
   } catch (error) {
@@ -85,7 +88,7 @@ export async function getCardNameById(id: string) {
 
 export async function getCardByName(name: string) {
   try {
-    const cards = loadCards();
+    const cards = await loadCards();
     const card = cards.find((card) => card.name === name);
     return card;
   } catch (error) {
@@ -97,7 +100,7 @@ export async function getCardByName(name: string) {
 
 export async function getCardsByQuery(query: string) {
   try {
-    const cards = loadCards();
+    const cards = await loadCards();
     return cards.filter((c) => fuzzyMatch(c.name, query));
   } catch (error) {
     throw new Error(

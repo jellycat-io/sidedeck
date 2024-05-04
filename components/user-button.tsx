@@ -24,7 +24,7 @@ import {
 import { ExtendedUser } from '@/next-auth';
 
 interface UserButtonProps {
-  user: ExtendedUser;
+  user?: ExtendedUser;
 }
 
 export function UserButton({ user }: UserButtonProps) {

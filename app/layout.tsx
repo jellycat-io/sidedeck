@@ -5,8 +5,6 @@ import { SessionProvider } from 'next-auth/react';
 
 import { auth } from '@/auth';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -47,10 +45,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TooltipProvider>
-              {children}
-              <Toaster />
-            </TooltipProvider>
+            {children}
           </ThemeProvider>
         </body>
       </html>

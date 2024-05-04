@@ -37,6 +37,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-table": "^8.16.0",
     "@vercel/blob": "^0.23.2",
+    "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.3.0",
     "cheerio": "1.0.0-rc.12",

@@ -4,6 +4,7 @@ import { Archive, Gauge, LibraryBig } from 'lucide-react';
 
 import { Accordion } from '@/components/ui/accordion';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Routes } from '@/routes';
 
 import { SidebarBlock } from './sidebar-block';
 import { SidebarLink } from './sidebar-link';
@@ -41,12 +42,18 @@ export function Sidebar({ storageKey = 'sd-sidebar-state' }: SidebarProps) {
   return (
     <>
       <div className='font-medium text-xs flex items-center mb-1'>
-        <SidebarLink href='/dashboard' icon={<Gauge className='h-4 w-4' />}>
+        <SidebarLink
+          href={Routes.platform.dashboard}
+          icon={<Gauge className='h-4 w-4' />}
+        >
           Dashboard
         </SidebarLink>
       </div>
       <div className='font-medium text-xs flex items-center mb-1'>
-        <SidebarLink href='/library' icon={<LibraryBig className='h-4 w-4' />}>
+        <SidebarLink
+          href={Routes.platform.library}
+          icon={<LibraryBig className='h-4 w-4' />}
+        >
           Library
         </SidebarLink>
       </div>

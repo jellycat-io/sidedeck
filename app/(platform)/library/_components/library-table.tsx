@@ -109,7 +109,7 @@ export function LibraryTable({ data, loading }: LibraryTableProps) {
   );
 
   function handleRemoveCards(cards: LibraryCard[]) {
-    if (!cards.length) return;
+    if (!userId || !cards.length) return;
 
     const cardIds = cards.map((card) => card.id);
 

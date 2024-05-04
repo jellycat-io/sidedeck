@@ -1,3 +1,5 @@
+import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { LibraryProvider } from '@/contexts/library-context';
 
 import { Navbar } from './_components/navbar';
@@ -9,14 +11,17 @@ interface PlatformLayoutProps {
 
 export default function PlatformLayout({ children }: PlatformLayoutProps) {
   return (
-    <LibraryProvider>
-      <Navbar />
-      <div className='pt-14 md:grid md:grid-cols-[224px_auto] h-screen'>
-        <aside className='py-6 px-4 hidden md:block border-r'>
-          <Sidebar />
-        </aside>
-        <main className='px-8 py-6'>{children}</main>
-      </div>
-    </LibraryProvider>
+    <TooltipProvider>
+      <LibraryProvider>
+        <Navbar />
+        <div className='pt-14 md:grid md:grid-cols-[224px_auto] h-screen'>
+          <aside className='py-6 px-4 hidden md:block border-r'>
+            <Sidebar />
+          </aside>
+          <main className='px-8 py-6'>{children}</main>
+        </div>
+        <Toaster />
+      </LibraryProvider>
+    </TooltipProvider>
   );
 }
