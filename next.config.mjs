@@ -1,5 +1,3 @@
-import path from 'path';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -9,10 +7,6 @@ const nextConfig = {
         hostname: 'ayvom5vlizclv37r.public.blob.vercel-storage.com',
       },
     ],
-  },
-  output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: path.join(process.cwd(), 'cards.json'),
   },
 };
 

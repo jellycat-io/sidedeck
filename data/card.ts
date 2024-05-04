@@ -1,8 +1,5 @@
 import chalk from 'chalk';
 
-import { promises as fs } from 'fs';
-import path from 'path';
-
 import { db } from '@/lib/db';
 import { fuzzyMatch } from '@/lib/utils';
 import {
@@ -12,13 +9,9 @@ import {
 } from '@/schemas/card';
 import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
-// Construct the path to the JSON file
-const CARDS_JSON_PATH = path.join(process.cwd(), 'cards.json');
-
 let cachedCards: ApiCard[] = [];
 
 async function loadCards(): Promise<ApiCard[]> {
-  console.log(CARDS_JSON_PATH);
   try {
     if (cachedCards.length > 0) {
       console.log(chalk.blue(`Using cached cards data...`));
@@ -26,11 +19,11 @@ async function loadCards(): Promise<ApiCard[]> {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const data = await fs.readFile(CARDS_JSON_PATH, 'utf8');
+    const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/cards.json`);
     console.log(chalk.green('Cards data loaded.'));
 
     console.log(chalk.blue('Caching cards data...'));
-    cachedCards = JSON.parse(data);
+    cachedCards = await data.json();
     console.log(chalk.green('Cards data cached.'));
 
     return cachedCards;
