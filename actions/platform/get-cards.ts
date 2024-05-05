@@ -7,6 +7,7 @@ import { ApiCard } from '@/types/cards';
 export type GetCardsResponse = FetchState<ApiCard[]>;
 
 async function handler(): Promise<GetCardsResponse> {
+
   let cards = await getCards();
 
   if (!cards) {
