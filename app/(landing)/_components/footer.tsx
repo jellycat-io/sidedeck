@@ -2,7 +2,6 @@ import { Github, Heart } from 'lucide-react';
 import Link from 'next/link';
 
 import { Logo } from '@/components/logo';
-import { Button } from '@/components/ui/button';
 
 export function Footer() {
   return (
@@ -35,14 +34,15 @@ export function Footer() {
             </p>
           </div>
         </div>
-        <div className='flex flex-col items-start justify-center w-full space-y-2'>
+        {/* TODO: Add privacy policy and terms of service */}
+        {/* <div className='flex flex-col items-start justify-center w-full space-y-2'>
           <Button size='sm' variant='link' className='p-0' asChild>
             <Link href='/privacy-policy'>Privacy policy</Link>
           </Button>
           <Button size='sm' variant='link' className='p-0' asChild>
             <Link href='/terms-of-service'>Terms of service</Link>
           </Button>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

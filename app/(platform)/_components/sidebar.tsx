@@ -67,16 +67,19 @@ export function Sidebar({ storageKey = 'sd-sidebar-state' }: SidebarProps) {
           icon={<Archive className='h-4 w-4' />}
           isExpanded={expanded['decks']}
           onExpand={onExpand}
-          items={[
-            {
-              label: 'All Decks',
-              href: '/decks',
-            },
-            {
-              label: 'Create Deck',
-              href: '/decks/create',
-            },
-          ]}
+          items={
+            [
+              // TODO: Decks
+              // {
+              //   label: 'All Decks',
+              //   href: '/decks',
+              // },
+              // {
+              //   label: 'Create Deck',
+              //   href: '/decks/create',
+              // },
+            ]
+          }
         />
       </Accordion>
     </>
