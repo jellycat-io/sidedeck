@@ -1,12 +1,12 @@
 'use server';
 
 import { getCards } from '@/data/card';
-import { FetchState } from '@/lib/create-safe-fetch';
+import { FetchState, createSafeFetch } from '@/lib/create-safe-fetch';
 import { ApiCard } from '@/types/cards';
 
 export type GetCardsResponse = FetchState<ApiCard[]>;
 
-export async function getCardsAction(): Promise<GetCardsResponse> {
+async function handler(): Promise<GetCardsResponse> {
   let cards = await getCards();
 
   if (!cards) {
@@ -19,3 +19,5 @@ export async function getCardsAction(): Promise<GetCardsResponse> {
     data: cards,
   };
 }
+
+export const getCardsAction = createSafeFetch(handler);

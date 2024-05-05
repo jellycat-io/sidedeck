@@ -3,7 +3,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import { z } from 'zod';
 
-import { getCardNameById, getUserCard } from '@/data/card';
+import { getUserCard } from '@/data/card';
 import { ActionState, createSafeAction } from '@/lib/create-safe-action';
 import { db } from '@/lib/db';
 import { AddLibraryCardSchema } from '@/schemas/card';
@@ -12,19 +12,13 @@ export type AddLibraryCardInput = z.infer<typeof AddLibraryCardSchema>;
 export type AddLibraryCardResponse = { success: string };
 
 async function handler({
-  cardId,
+  card,
   userId,
   issue,
 }: AddLibraryCardInput): Promise<
   ActionState<AddLibraryCardInput, AddLibraryCardResponse>
 > {
-  const existingCard = await getUserCard(userId, cardId);
-
-  const cardName = await getCardNameById(cardId);
-
-  if (!cardName) {
-    return { error: `Error getting card name by id: ${cardId}` };
-  }
+  const existingCard = await getUserCard(userId, card.id);
 
   let res;
 
@@ -81,7 +75,7 @@ async function handler({
     // Create a new entry for the card in the library
     res = await db.userCard.create({
       data: {
-        cardId,
+        cardId: card.id,
         userId,
         issues: [
           {
@@ -96,10 +90,10 @@ async function handler({
   }
 
   if (!res) {
-    return { error: `Error adding card <${cardId}> to library` };
+    return { error: `Error adding card <${card.id}> to library` };
   }
 
-  return { data: { success: `${cardName} added successfully` } };
+  return { data: { success: `${card.name} added successfully` } };
 }
 
 export const addLibraryCardAction = createSafeAction(

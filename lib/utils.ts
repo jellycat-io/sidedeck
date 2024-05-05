@@ -41,28 +41,6 @@ export function toSnakeCase(str: string) {
     .toLowerCase();
 }
 
-/**
- * Checks if a query is a fuzzy match for a target string
- * @param cardName  The name of the card to match against
- * @param query The query to match against the card name
- * @returns true if the query is a fuzzy match for the card name, false otherwise
- */
-export function fuzzyMatch(target: string, query: string) {
-  const queryLower = query.toLowerCase();
-  const targetLower = target.toLowerCase();
-  let queryIndex = 0;
-
-  for (const char of targetLower) {
-    if (char === queryLower[queryIndex]) {
-      queryIndex++;
-      if (queryIndex === queryLower.length) {
-        return true; // All characters in the query have been found consecutively in the card name
-      }
-    }
-  }
-  return false; // Not all characters were found in order
-}
-
 export function getFrametypeColors(
   card: Pick<LibraryCard, 'frameType' | 'slug'>,
 ) {
