@@ -4,7 +4,6 @@
 import { LoaderCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
-import { getCardsAction } from '@/actions/platform/get-cards';
 import { CardSheet } from '@/components/card-finder/card-sheet';
 import { FrameTypeBadge } from '@/components/frame-type-badge';
 import { Button } from '@/components/ui/button';
@@ -22,7 +21,11 @@ import { ApiCard } from '@/types/cards';
 
 const PAGE_SIZE = 20;
 
-export function CardFinder() {
+interface CardFinderProps {
+  cards: ApiCard[];
+}
+
+export function CardFinder({ cards: fetchedCards }: CardFinderProps) {
   const [openFinder, setOpenFinder] = useState(false);
   const [openCardSheet, setOpenCardSheet] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ApiCard | null>(null);
@@ -51,14 +54,17 @@ export function CardFinder() {
     async (pageNum: number, isInitial = false) => {
       setLoading(true);
       try {
-        const { cards: fetchedCards, totalCount } = await getCardsAction({
-          page: pageNum,
-          pageSize: PAGE_SIZE,
-          query: debouncedQuery,
-        });
+        const matchedCards = fetchedCards.filter((card) =>
+          card.name.toLowerCase().includes(debouncedQuery?.toLowerCase() ?? ''),
+        );
+        const totalCount = matchedCards.length;
+        const paginatedCards = matchedCards.slice(
+          pageNum * PAGE_SIZE,
+          (pageNum + 1) * PAGE_SIZE,
+        );
         setTotalQueryCount(totalCount);
         setCards((prev) =>
-          isInitial ? fetchedCards : [...prev, ...fetchedCards],
+          isInitial ? paginatedCards : [...prev, ...paginatedCards],
         );
         setHasMore(totalCount > (pageNum + 1) * PAGE_SIZE);
       } catch (error) {

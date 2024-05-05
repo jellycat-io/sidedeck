@@ -12,7 +12,7 @@ import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
 let cachedCards: ApiCard[] = [];
 
-async function loadCards(): Promise<ApiCard[]> {
+export async function loadCards(): Promise<ApiCard[]> {
   try {
     if (cachedCards.length > 0) {
       console.log(chalk.blue(`Using cached cards data...`));

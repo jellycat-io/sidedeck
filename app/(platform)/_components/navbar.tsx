@@ -8,10 +8,15 @@ import { CardFinder } from '@/components/card-finder/card-finder';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@/components/user-button';
+import { ApiCard } from '@/types/cards';
 
 import { MobileSidebar } from './mobile-sidebar';
 
-export function Navbar() {
+interface NavbarProps {
+  cards: ApiCard[];
+}
+
+export function Navbar({ cards }: NavbarProps) {
   const session = useSession();
 
   if (!session) {
@@ -26,7 +31,7 @@ export function Navbar() {
           <Logo withLabel />
         </div>
         <div className='w-full flex justify-between md:justify-end md:space-x-4'>
-          <CardFinder />
+          <CardFinder cards={cards} />
           <div className='flex space-x-4 items-center'>
             <UserButton user={session.data?.user} />
             <Link
