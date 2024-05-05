@@ -4,8 +4,6 @@
 import { LoaderCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
-import { getCardsAction } from '@/actions/platform/get-cards';
-import { CardSheet } from '@/components/card-finder/card-sheet';
 import { FrameTypeBadge } from '@/components/frame-type-badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,8 +15,11 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
+import { useCards } from '@/hooks/use-cards';
 import { useDebounce } from '@/hooks/use-debounce';
 import { ApiCard } from '@/types/cards';
+
+import { CardSheet } from './card-sheet';
 
 const PAGE_SIZE = 20;
 
@@ -33,6 +34,8 @@ export function CardFinder() {
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
+
+  const { cards: apiCards, getQueryCards, loading: loadingCards } = useCards();
 
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
@@ -51,10 +54,10 @@ export function CardFinder() {
     async (pageNum: number, isInitial = false) => {
       setLoading(true);
       try {
-        const { cards: fetchedCards, totalCount } = await getCardsAction({
+        const { cards: fetchedCards, totalCount } = getQueryCards({
+          query: debouncedQuery ?? 'blue-eyes white dragon',
+          limit: PAGE_SIZE,
           page: pageNum,
-          pageSize: PAGE_SIZE,
-          query: debouncedQuery,
         });
         setTotalQueryCount(totalCount);
         setCards((prev) =>
@@ -67,14 +70,16 @@ export function CardFinder() {
         setLoading(false);
       }
     },
-    [debouncedQuery],
+    [debouncedQuery, loadingCards, getQueryCards],
   );
 
   // Effect for initial fetch or on query change
   useEffect(() => {
     setPage(0);
-    fetchCards(0, true);
-  }, [debouncedQuery]);
+    if (!loadingCards) {
+      fetchCards(0, true);
+    }
+  }, [debouncedQuery, apiCards]);
 
   // Effect for loading more items
   useEffect(() => {
@@ -111,20 +116,21 @@ export function CardFinder() {
             <CommandEmpty>No results found</CommandEmpty>
           )}
           <CommandGroup>
-            {cards.map((card) => (
-              <CommandItem
-                key={card.id}
-                value={card.name}
-                onSelect={() => {
-                  setSelectedCard(card);
-                  setOpenCardSheet(true);
-                }}
-                className='flex items-center justify-between'
-              >
-                <span>{card.name}</span>
-                <FrameTypeBadge card={card} />
-              </CommandItem>
-            ))}
+            {cards.length &&
+              cards.map((card) => (
+                <CommandItem
+                  key={card.id}
+                  value={card.name}
+                  onSelect={() => {
+                    setSelectedCard(card);
+                    setOpenCardSheet(true);
+                  }}
+                  className='flex items-center justify-between'
+                >
+                  <span>{card.name}</span>
+                  <FrameTypeBadge card={card} />
+                </CommandItem>
+              ))}
           </CommandGroup>
         </CommandList>
         <CommandSeparator />
@@ -151,7 +157,10 @@ export function CardFinder() {
           card={selectedCard}
           open={openCardSheet}
           onOpenChange={setOpenCardSheet}
-          onRedirect={() => handleOpenChange(false)}
+          onRedirect={() => {
+            setOpenCardSheet(false);
+            setOpenFinder(false);
+          }}
         />
       )}
     </>
