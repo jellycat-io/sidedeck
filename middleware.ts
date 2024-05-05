@@ -1,13 +1,18 @@
-import { auth as middleware } from '@/auth';
+import NextAuth from 'next-auth';
+
+import authConfig from '@/auth.config';
+
 import {
   DEFAULT_LOGIN_REDIRECT,
   Routes,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
-} from '@/routes';
+} from './routes';
 
-export default middleware((req) => {
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
