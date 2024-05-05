@@ -1,7 +1,6 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LibraryProvider } from '@/contexts/library-context';
-import { loadCards } from '@/data/card';
 
 import { Navbar } from './_components/navbar';
 import { Sidebar } from './_components/sidebar';
@@ -13,7 +12,8 @@ interface PlatformLayoutProps {
 export default async function PlatformLayout({
   children,
 }: PlatformLayoutProps) {
-  const apiCards = await loadCards();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/cards.json`);
+  const apiCards = await res.json();
 
   return (
     <TooltipProvider>
