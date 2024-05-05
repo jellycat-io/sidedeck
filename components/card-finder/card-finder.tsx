@@ -35,7 +35,7 @@ export function CardFinder() {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
 
-  const { cards: apiCards, getQueryCards, loading: loadingCards } = useCards();
+  const { cards: apiCards, getQueryCards } = useCards();
 
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
@@ -59,6 +59,7 @@ export function CardFinder() {
           limit: PAGE_SIZE,
           page: pageNum,
         });
+        console.log(fetchedCards, totalCount);
         setTotalQueryCount(totalCount);
         setCards((prev) =>
           isInitial ? fetchedCards : [...prev, ...fetchedCards],
@@ -70,13 +71,13 @@ export function CardFinder() {
         setLoading(false);
       }
     },
-    [debouncedQuery, loadingCards, getQueryCards],
+    [debouncedQuery, getQueryCards],
   );
 
   // Effect for initial fetch or on query change
   useEffect(() => {
     setPage(0);
-    if (!loadingCards) {
+    if (apiCards) {
       fetchCards(0, true);
     }
   }, [debouncedQuery, apiCards]);
