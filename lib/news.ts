@@ -12,8 +12,8 @@ const SOURCE_DOMAIN = 'https://www.yugioh-card.com';
 
 export async function generateNewsFeed(): Promise<Article[]> {
   try {
-    const response = await axios.get('https://www.yugioh-card.com/en/news');
-    const $ = cheerio.load(await response.data);
+    const response = await fetch('https://www.yugioh-card.com/en/news');
+    const $ = cheerio.load(await response.text());
 
     const feed: Article[] = [];
 
