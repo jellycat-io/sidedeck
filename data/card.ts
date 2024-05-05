@@ -1,4 +1,3 @@
-import axios from 'axios';
 import chalk from 'chalk';
 
 import { db } from '@/lib/db';
@@ -10,6 +9,8 @@ import {
 } from '@/schemas/card';
 import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
 
+const CARDS_URL = `${process.env.NEXT_PUBLIC_VERCEL_URL?.includes('localhost') ? process.env.NEXT_PUBLIC_VERCEL_URL : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`}/cards.json`;
+
 let cachedCards: ApiCard[] = [];
 
 export async function loadCards(): Promise<ApiCard[]> {
@@ -20,18 +21,15 @@ export async function loadCards(): Promise<ApiCard[]> {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/cards.json`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const res = await fetch(CARDS_URL, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
     console.log(chalk.green('Cards data loaded.'));
 
     console.log(chalk.blue('Caching cards data...'));
-    cachedCards = await res.data;
+    cachedCards = await res.json();
     console.log(chalk.green('Cards data cached.'));
 
     return cachedCards;
