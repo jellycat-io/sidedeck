@@ -48,7 +48,7 @@ export function LibraryCardSheet({
         <div className='hidden lg:block shrink-0'>
           <CardImage src={card.imageUrl} alt={card.name} width={250} />
         </div>
-        <div className='flex flex-col gap-y-2 overflow-auto'>
+        <div className='flex flex-col gap-y-2 overflow-auto pr-2'>
           <div className='flex items-center space-x-2'>
             <h3 className='text-xl font-semibold'>{card.name}</h3>
             <p className='text-sm text-muted-foreground'>

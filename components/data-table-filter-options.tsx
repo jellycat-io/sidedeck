@@ -1,5 +1,5 @@
-import { Table } from '@tanstack/react-table';
-import { Eye } from 'lucide-react';
+import { Column, Table } from '@tanstack/react-table';
+import { Filter } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,35 +12,46 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { camelCasetoCapitalized } from '@/lib/utils';
 
-interface DataTableViewOptionsProps<TData> {
+interface DataTableFilterOptionsProps<TData, TValue> {
   table: Table<TData>;
+  filters: Record<Column<TData, TValue>['id'], boolean>;
+  onFilterChange: (
+    filter: Record<Column<TData, TValue>['id'], boolean>,
+  ) => void;
 }
 
-export function DataTableViewOptions<TData>({
+export function DataTableFilterOptions<TData, TValue>({
   table,
-}: DataTableViewOptionsProps<TData>) {
+  filters,
+  onFilterChange,
+}: DataTableFilterOptionsProps<TData, TValue>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' size='sm' className='hidden h-8 lg:flex'>
-          <Eye className='mr-2 h-4 w-4' />
-          View
+          <Filter className='mr-2 h-4 w-4' />
+          Filters
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-[150px]'>
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Toggle filters</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
-          .getAllColumns()
+          .getAllFlatColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== undefined && column.getCanHide(),
+              typeof column.accessorFn !== undefined && column.getCanFilter(),
           )
           .map((column) => (
             <DropdownMenuCheckboxItem
               key={column.id}
-              checked={column.getIsVisible()}
-              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+              checked={!!filters[column.id]}
+              onCheckedChange={(value) =>
+                onFilterChange({
+                  ...filters,
+                  [column.id]: !!value,
+                })
+              }
             >
               {camelCasetoCapitalized(column.id)}
             </DropdownMenuCheckboxItem>
