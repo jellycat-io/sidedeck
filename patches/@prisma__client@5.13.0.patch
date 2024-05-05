@@ -1,0 +1,15 @@
+diff --git a/generator-build/index.js b/generator-build/index.js
+index e90c16c8d1419122daa4bd5e95a3f45893d09425..43350cb9b271be616223493627fc8218d2caba2e 100644
+--- a/generator-build/index.js
++++ b/generator-build/index.js
+@@ -18365,8 +18365,8 @@ async function buildClient({
+   if (generator.previewFeatures.includes("driverAdapters")) {
+     fileMap["default.js"] = await JS(trampolineTsClient);
+     fileMap["default.d.ts"] = await TS(trampolineTsClient);
+-    fileMap["wasm-worker-loader.js"] = `export default (await import('./query_engine_bg.wasm')).default`;
+-    fileMap["wasm-edge-light-loader.js"] = `export default (await import('./query_engine_bg.wasm?module')).default`;
++    fileMap['wasm-worker-loader.js'] = `export { default } from './query_engine_bg.wasm'`
++    fileMap['wasm-edge-light-loader.js'] = `export { default } from './query_engine_bg.wasm?module'`
+     pkgJson["browser"] = "default.js";
+     pkgJson["imports"] = {
+       // when `import('#wasm-engine-loader')` is called, it will be resolved to the correct file

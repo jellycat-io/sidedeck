@@ -2,21 +2,17 @@
 
 import { Github } from 'lucide-react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 
 import { CardFinder } from '@/components/card-finder/card-finder';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@/components/user-button';
+import { useCurrentSession } from '@/hooks/use-current-session';
 
 import { MobileSidebar } from './mobile-sidebar';
 
 export function Navbar() {
-  const session = useSession();
-
-  if (!session) {
-    return null;
-  }
+  const { session } = useCurrentSession();
 
   return (
     <nav className='fixed top-0 w-full z-50 h-14 px-4 border-b shadow-sm flex items-center bg-background'>
@@ -28,7 +24,7 @@ export function Navbar() {
         <div className='w-full flex justify-between md:justify-end md:space-x-4'>
           <CardFinder />
           <div className='flex space-x-4 items-center'>
-            <UserButton user={session.data?.user} />
+            <UserButton user={session?.user} />
             <Link
               href='https://github.com/jellycat-io/sidedeck'
               target='_blank'

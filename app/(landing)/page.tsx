@@ -1,14 +1,10 @@
 'use client';
 
-import * as dateFns from 'date-fns';
-import { Calendar, Rocket } from 'lucide-react';
+import { Rocket } from 'lucide-react';
 import Link from 'next/link';
 
-import { getNews } from '@/actions/news/get-news';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useFetch } from '@/hooks/use-fetch';
 import { Routes } from '@/routes';
 
 const features: Array<{
@@ -32,7 +28,7 @@ const features: Array<{
 ];
 
 export default function LandingPage() {
-  const { data: news, loading: loadingNews } = useFetch(getNews);
+  // const { data: news, loading: loadingNews } = useFetch(getNews);
 
   return (
     <div className='h-full'>
@@ -67,7 +63,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-        <div className='p-12 flex flex-col space-y-6'>
+        {/* <div className='p-12 flex flex-col space-y-6'>
           <h2 className='text-2xl text-center font-bold'>
             Latest Yu-Gi-Oh! news
           </h2>
@@ -97,7 +93,7 @@ export default function LandingPage() {
               </>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

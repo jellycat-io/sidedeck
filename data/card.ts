@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 
 import { db } from '@/lib/db';
-import { fuzzyMatch } from '@/lib/utils';
 import {
   LibraryCardSchema,
   UserCardSchema,
@@ -52,17 +51,6 @@ export async function getCards() {
   }
 }
 
-export async function getCardsByIds(ids: string[]) {
-  try {
-    const cards = await loadCards();
-    return cards.filter((card) => ids.includes(card.id));
-  } catch (error) {
-    throw new Error(
-      `Error getting cards by ids: ${ids}, ${error instanceof Error ? error.message : error}`,
-    );
-  }
-}
-
 export async function getCardById(id: string) {
   try {
     const cards = await loadCards();
@@ -71,40 +59,6 @@ export async function getCardById(id: string) {
   } catch (error) {
     throw new Error(
       `Error getting card by id: ${id}, ${error instanceof Error ? error.message : error}`,
-    );
-  }
-}
-
-export async function getCardNameById(id: string) {
-  try {
-    const card = await getCardById(id);
-    return card?.name;
-  } catch (error) {
-    throw new Error(
-      `Error getting card name by id: ${id}, ${error instanceof Error ? error.message : error}`,
-    );
-  }
-}
-
-export async function getCardByName(name: string) {
-  try {
-    const cards = await loadCards();
-    const card = cards.find((card) => card.name === name);
-    return card;
-  } catch (error) {
-    throw new Error(
-      `Error getting card by name: ${name}, ${error instanceof Error ? error.message : error}`,
-    );
-  }
-}
-
-export async function getCardsByQuery(query: string) {
-  try {
-    const cards = await loadCards();
-    return cards.filter((c) => fuzzyMatch(c.name, query));
-  } catch (error) {
-    throw new Error(
-      `Error getting cards by query: ${query}, ${error instanceof Error ? error.message : error}`,
     );
   }
 }

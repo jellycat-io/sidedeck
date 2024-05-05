@@ -43,9 +43,7 @@ export const ApiCardSchema = z.object({
 
 export const UserCardIssueSchema = z.object({
   id: z.string(),
-  language: z
-    .enum(['en', 'de', 'fr', 'it', 'es', 'pt', 'jp', 'kr'])
-    .default('en'),
+  language: z.enum(['en', 'de', 'fr', 'it', 'es', 'pt', 'jp', 'kr']),
   quantity: z.number(),
   tradeable: z.boolean().optional(),
   rarity: z.enum([
@@ -137,7 +135,10 @@ export const GetLibraryCardsSchema = z.object({
 });
 
 export const AddLibraryCardSchema = z.object({
-  cardId: z.string(),
+  card: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
   userId: z.string(),
   issue: UserCardIssueSchema.omit({
     id: true,

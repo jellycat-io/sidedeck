@@ -279,7 +279,10 @@ function CardIssuesTable({ userId, card, onAdd }: CardIssuesTableProps) {
       : rarityNameToCode(set.set_rarity as CardRarityName);
 
     addLibraryCard({
-      cardId: card.id,
+      card: {
+        id: card.id,
+        name: card.name,
+      },
       userId,
       issue: {
         language: data.language,
