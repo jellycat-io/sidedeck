@@ -38,6 +38,11 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  useEffect(() => {
     if (libraryCards) {
       setCards(libraryCards);
     }
