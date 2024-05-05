@@ -18,7 +18,7 @@ async function loadCards(): Promise<ApiCard[]> {
     }
 
     console.log(chalk.blue(`Loading cards data...`));
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/cards.json`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/cards.json`);
 
     if (!res.ok) {
       throw new Error(
