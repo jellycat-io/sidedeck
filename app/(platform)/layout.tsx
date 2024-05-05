@@ -1,6 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-
 import { CardProvider } from '@/contexts/card-context';
 import { LibraryProvider } from '@/contexts/library-context';
 
