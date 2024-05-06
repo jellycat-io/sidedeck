@@ -10,11 +10,7 @@ interface PanelActionLinkProps {
 
 export function PanelActionLink({ href, children }: PanelActionLinkProps) {
   return (
-    <Button
-      variant='ghost'
-      className='w-full hover:-translate-y-0 rounded-none'
-      asChild
-    >
+    <Button variant='ghost' className='w-full rounded-none' asChild>
       <Link href={href}>
         <Eye className='mr-2 w-4 h-4' />
         {children}

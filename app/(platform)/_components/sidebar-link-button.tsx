@@ -14,14 +14,16 @@ export function SidebarLinkButton({
   disabled,
 }: SidebarLinkButtonProps) {
   return (
-    <Button
-      variant='ghost'
-      size='icon'
-      className='ml-auto'
-      asChild
-      disabled={disabled}
-    >
-      <Link href={href}>{children}</Link>
-    </Button>
+    <Link href={href}>
+      <Button
+        variant='ghost'
+        size='icon'
+        className='ml-auto'
+        asChild
+        disabled={disabled}
+      >
+        {children}
+      </Button>
+    </Link>
   );
 }

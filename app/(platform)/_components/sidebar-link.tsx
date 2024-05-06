@@ -28,20 +28,20 @@ export function SidebarLink({
 
   return (
     <div className='w-full'>
-      <Button
-        variant='ghost'
-        size='sm'
-        className={cn(
-          'w-full hover:-translate-y-0 justify-start',
-          isActive && 'bg-accent text-accent-foreground',
-        )}
-        disabled={disabled}
-      >
-        <Link href={href} className='flex items-center gap-x-2'>
+      <Link href={href}>
+        <Button
+          variant='ghost'
+          size='sm'
+          className={cn(
+            'w-full justify-start gap-x-2',
+            isActive && 'bg-accent text-accent-foreground',
+          )}
+          disabled={disabled}
+        >
           {icon}
           {children}
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 }

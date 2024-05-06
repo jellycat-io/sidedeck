@@ -10,7 +10,7 @@ import { RemoveIssuesSchema } from '@/schemas/card';
 export type RemoveIssuesInput = z.infer<typeof RemoveIssuesSchema>;
 export type RemoveIssuesResponse = ActionState<
   RemoveIssuesInput,
-  { success: string }
+  { success: string; removed?: boolean }
 >;
 
 async function handler({
@@ -28,6 +28,18 @@ async function handler({
   const updatedIssues = card.issues.filter(
     (issue) => !issueIds.includes(issue?.id),
   );
+
+  if (updatedIssues.length === 0) {
+    await db.userCard.delete({
+      where: {
+        id: card.id,
+      },
+    });
+
+    return {
+      data: { success: 'Card removed successfully', removed: true },
+    };
+  }
 
   await db.userCard.update({
     where: {

@@ -2,7 +2,6 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { removeLibraryCardAction } from '@/actions/platform/library/remove-library-card';
@@ -15,10 +14,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useAction } from '@/hooks/use-action';
 import { useCurrentUserId } from '@/hooks/use-current-user';
 import { useLibrary } from '@/hooks/use-library';
-import { formatDateFromNow } from '@/lib/utils';
+import { dateRangeFilterFn, formatDateFromNow } from '@/lib/utils';
 import { LibraryCard } from '@/types/cards';
-
-import { LibraryCardSheet } from './library-card-sheet';
 
 export const columns: ColumnDef<LibraryCard>[] = [
   {
@@ -53,6 +50,10 @@ export const columns: ColumnDef<LibraryCard>[] = [
       <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: (cell) => <CardTooltip card={cell.row.original} />,
+    filterFn: (row, id, value) => row.original.name.includes(value),
+    meta: {
+      filterVariant: 'text',
+    },
   },
   {
     accessorKey: 'type',
@@ -60,6 +61,14 @@ export const columns: ColumnDef<LibraryCard>[] = [
       <DataTableColumnHeader column={column} title='Type' />
     ),
     cell: (cell) => <FrameTypeBadge card={cell.row.original} />,
+    filterFn: (row, id, value) => {
+      if (value === 'all') return true;
+
+      return row.original.type === value;
+    },
+    meta: {
+      filterVariant: 'select',
+    },
   },
   {
     accessorKey: 'quantity',
@@ -69,6 +78,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
     cell: (cell) => (
       <Badge variant='outline'>x {cell.row.original.quantity}</Badge>
     ),
+    enableColumnFilter: false,
   },
   {
     accessorKey: 'createdAt',
@@ -76,6 +86,10 @@ export const columns: ColumnDef<LibraryCard>[] = [
       <DataTableColumnHeader column={column} title='Added' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
+    filterFn: dateRangeFilterFn,
+    meta: {
+      filterVariant: 'date',
+    },
   },
   {
     accessorKey: 'updatedAt',
@@ -83,18 +97,19 @@ export const columns: ColumnDef<LibraryCard>[] = [
       <DataTableColumnHeader column={column} title='Updated' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
+    filterFn: dateRangeFilterFn,
+    meta: {
+      filterVariant: 'date',
+    },
   },
 ];
 
 interface LibraryTableProps {
   data: LibraryCard[];
-  loading?: boolean;
+  onCardClick: (card: LibraryCard) => void;
 }
 
-export function LibraryTable({ data, loading }: LibraryTableProps) {
-  const [selectedCard, setSelectedCard] = useState<LibraryCard | null>(null);
-  const [openSheet, setOpenSheet] = useState(false);
-
+export function LibraryTable({ data, onCardClick }: LibraryTableProps) {
   const userId = useCurrentUserId();
   const { refreshLibrary } = useLibrary();
   const { execute: removeCards, loading: removingCards } = useAction(
@@ -129,10 +144,9 @@ export function LibraryTable({ data, loading }: LibraryTableProps) {
         columns={columns}
         data={data}
         pagination
-        loading={loading}
+        filtering
         onRowClick={(card) => {
-          setSelectedCard(card);
-          setOpenSheet(true);
+          onCardClick(card);
         }}
         batchActions={[
           {
@@ -153,18 +167,6 @@ export function LibraryTable({ data, loading }: LibraryTableProps) {
           },
         ]}
       />
-      {!!selectedCard && (
-        <LibraryCardSheet
-          cardId={selectedCard.id}
-          open={openSheet}
-          onOpenChange={(open) => {
-            setOpenSheet(open);
-            if (!open) {
-              setSelectedCard(null);
-            }
-          }}
-        />
-      )}
     </>
   );
 }

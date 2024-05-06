@@ -35,7 +35,7 @@ export function MobileSidebar() {
     <>
       <Button
         variant='ghost'
-        className='flex md:hidden hover:-translate-y-0'
+        className='flex md:hidden'
         onClick={onOpen}
         size='iconSm'
       >

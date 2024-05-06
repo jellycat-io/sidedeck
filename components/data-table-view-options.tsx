@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import { Filter } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { camelCasetoCapitalized } from '@/lib/utils';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -22,7 +23,7 @@ export function DataTableViewOptions<TData>({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' size='sm' className='hidden h-8 lg:flex'>
-          <Filter className='mr-2 h-4 w-4' />
+          <Eye className='mr-2 h-4 w-4' />
           View
         </Button>
       </DropdownMenuTrigger>
@@ -38,11 +39,10 @@ export function DataTableViewOptions<TData>({
           .map((column) => (
             <DropdownMenuCheckboxItem
               key={column.id}
-              className='capitalize'
               checked={column.getIsVisible()}
               onCheckedChange={(value) => column.toggleVisibility(!!value)}
             >
-              {column.id}
+              {camelCasetoCapitalized(column.id)}
             </DropdownMenuCheckboxItem>
           ))}
       </DropdownMenuContent>

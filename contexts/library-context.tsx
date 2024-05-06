@@ -14,6 +14,7 @@ interface LibraryContextValue {
   getLastCards: () => LibraryCard[];
   getLibraryCard: (id: string) => LibraryCard | undefined;
   getIssueCardId: (issueId: string) => string | undefined;
+  getCard: (id: string) => LibraryCard | undefined;
 }
 
 export const LibraryContext = createContext<LibraryContextValue>({
@@ -23,6 +24,7 @@ export const LibraryContext = createContext<LibraryContextValue>({
   getLastCards: () => [],
   getLibraryCard: () => undefined,
   getIssueCardId: () => undefined,
+  getCard: () => undefined,
 });
 
 export function LibraryProvider({ children }: { children: React.ReactNode }) {
@@ -72,6 +74,11 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
     [cards],
   );
 
+  const getCard = useCallback(
+    (id: string) => cards.find((card) => card.id === id),
+    [cards],
+  );
+
   return (
     <LibraryContext.Provider
       value={{
@@ -81,6 +88,7 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
         getLastCards,
         getLibraryCard,
         getIssueCardId,
+        getCard,
       }}
     >
       {children}

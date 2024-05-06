@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { BadgeEuro, Minus, Plus, Shield, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { removeIssuesAction } from '@/actions/platform/library/remove-issues';
@@ -60,6 +61,10 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         <TooltipContent>{cell.row.original.set.setName}</TooltipContent>
       </Tooltip>
     ),
+    filterFn: (row, id, value) => row.original.set.setCode.includes(value),
+    meta: {
+      filterVariant: 'text',
+    },
   },
   {
     accessorKey: 'rarity',
@@ -71,6 +76,14 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         {codeToRarityName(cell.row.original.rarity)}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      if (value === 'all') return true;
+
+      return row.original.rarity === value;
+    },
+    meta: {
+      filterVariant: 'select',
+    },
   },
   {
     accessorKey: 'language',
@@ -82,6 +95,14 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         <FlagIcon locale={cell.row.original.language} />
       </div>
     ),
+    filterFn: (row, id, value) => {
+      if (value === 'all') return true;
+
+      return row.original.language === value;
+    },
+    meta: {
+      filterVariant: 'select',
+    },
   },
   {
     accessorKey: 'quantity',
@@ -92,6 +113,7 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         quantity={cell.row.original.quantity}
       />
     ),
+    enableColumnFilter: false,
   },
   {
     accessorKey: 'tradeable',
@@ -105,6 +127,10 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         )}
       </div>
     ),
+    filterFn: (row, id, value) => !!row.original.tradeable === !!value,
+    meta: {
+      filterVariant: 'boolean',
+    },
   },
   {
     accessorKey: 'createdAt',
@@ -112,6 +138,9 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
       <DataTableColumnHeader column={column} title='Added' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
+    meta: {
+      filterVariant: 'date',
+    },
   },
   {
     accessorKey: 'updatedAt',
@@ -119,26 +148,34 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
       <DataTableColumnHeader column={column} title='Updated' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
+    meta: {
+      filterVariant: 'date',
+    },
   },
 ];
 
 interface LibraryCardIssuesTableProps {
   cardId: string;
   issues: LibraryCardIssue[];
+  onRemoveLastIssue: () => void;
 }
 
 export function LibraryCardIssuesTable({
   cardId,
   issues,
+  onRemoveLastIssue,
 }: LibraryCardIssuesTableProps) {
   const { refreshLibrary } = useLibrary();
   const { execute: removeIssues, loading: removingIssues } = useAction(
     removeIssuesAction,
     {
       onError: toast.error,
-      onSuccess: ({ success }) => {
+      onSuccess: ({ success, removed }) => {
         toast.success(success);
         refreshLibrary();
+        if (removed) {
+          onRemoveLastIssue();
+        }
       },
     },
   );
@@ -191,6 +228,7 @@ export function LibraryCardIssuesTable({
       columns={columns}
       data={issues}
       pagination
+      filtering
       defaultPageSize={3}
       batchActions={[
         {
@@ -247,11 +285,12 @@ export function QuantityButtonsGroup({
   issueId,
   quantity,
 }: QuantityButtonsGroupProps) {
+  const [quantityValue, setQuantityValue] = useState<number>(quantity);
   const { getIssueCardId, refreshLibrary } = useLibrary();
 
   const cardId = getIssueCardId(issueId);
 
-  const { execute: updateIssueQuantity } = useAction(
+  const { execute: updateIssueQuantity, loading: updatingCard } = useAction(
     updateIssueQuantityAction,
     {
       onError: toast.error,
@@ -262,43 +301,43 @@ export function QuantityButtonsGroup({
     },
   );
 
-  function incrementIssueQuantity() {
-    if (!cardId) return;
-    updateIssueQuantity({
-      cardId,
-      issueId: issueId,
-      quantity: quantity + 1,
-    });
+  function handleChangeQuantity(value: number) {
+    setQuantityValue(value);
   }
 
-  function decrementIssueQuantity() {
+  useEffect(() => {
     if (!cardId) return;
 
-    updateIssueQuantity({
-      cardId,
-      issueId: issueId,
-      quantity: quantity - 1,
-    });
-  }
+    if (quantityValue !== quantity) {
+      updateIssueQuantity({
+        cardId,
+        issueId,
+        quantity: quantityValue,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardId, issueId, quantity, quantityValue]);
 
   return (
     <div className='rounded-md border flex justify-between items-center overflow-hidden h-7'>
       <Button
         variant='ghost'
         size='iconSm'
-        className='border-r rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
-        onClick={() => decrementIssueQuantity()}
+        className='border-r rounded-none flex-1 focus-visible:ring-none h-8 w-8'
+        disabled={updatingCard || quantity === 1}
+        onClick={() => handleChangeQuantity(quantity - 1)}
       >
         <Minus className='h-4 w-4' />
       </Button>
-      <div className='flex-1 flex justify-center items-center cursor-default'>
+      <div className='flex-1 flex justify-center items-center cursor-default min-w-8'>
         {quantity}
       </div>
       <Button
         variant='ghost'
         size='iconSm'
-        className='border-l rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
-        onClick={() => incrementIssueQuantity()}
+        className='border-l rounded-none flex-1 focus-visible:ring-none h-8 w-8'
+        disabled={updatingCard}
+        onClick={() => handleChangeQuantity(quantity + 1)}
       >
         <Plus className='h-4 w-4' />
       </Button>
