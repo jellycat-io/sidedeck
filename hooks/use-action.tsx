@@ -37,6 +37,7 @@ export function useAction<TI, TO>(
           options.onSuccess?.(result.data);
         }
       } catch (e) {
+        console.log(e);
         setError(`An error occurred: ${e}`);
         options.onError?.('An error occurred');
       } finally {
