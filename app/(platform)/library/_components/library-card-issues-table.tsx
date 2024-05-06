@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { BadgeEuro, Minus, Plus, Shield, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { removeIssuesAction } from '@/actions/platform/library/remove-issues';
@@ -279,11 +280,12 @@ export function QuantityButtonsGroup({
   issueId,
   quantity,
 }: QuantityButtonsGroupProps) {
+  const [quantityValue, setQuantityValue] = useState<number>(quantity);
   const { getIssueCardId, refreshLibrary } = useLibrary();
 
   const cardId = getIssueCardId(issueId);
 
-  const { execute: updateIssueQuantity } = useAction(
+  const { execute: updateIssueQuantity, loading: updatingCard } = useAction(
     updateIssueQuantityAction,
     {
       onError: toast.error,
@@ -294,24 +296,22 @@ export function QuantityButtonsGroup({
     },
   );
 
-  function incrementIssueQuantity() {
-    if (!cardId) return;
-    updateIssueQuantity({
-      cardId,
-      issueId: issueId,
-      quantity: quantity + 1,
-    });
+  function handleChangeQuantity(value: number) {
+    setQuantityValue(value);
   }
 
-  function decrementIssueQuantity() {
+  useEffect(() => {
     if (!cardId) return;
 
-    updateIssueQuantity({
-      cardId,
-      issueId: issueId,
-      quantity: quantity - 1,
-    });
-  }
+    if (quantityValue !== quantity) {
+      updateIssueQuantity({
+        cardId,
+        issueId,
+        quantity: quantityValue,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardId, issueId, quantity, quantityValue]);
 
   return (
     <div className='rounded-md border flex justify-between items-center overflow-hidden h-7'>
@@ -319,18 +319,20 @@ export function QuantityButtonsGroup({
         variant='ghost'
         size='iconSm'
         className='border-r rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
-        onClick={() => decrementIssueQuantity()}
+        disabled={updatingCard || quantity === 1}
+        onClick={() => handleChangeQuantity(quantity - 1)}
       >
         <Minus className='h-4 w-4' />
       </Button>
-      <div className='flex-1 flex justify-center items-center cursor-default'>
+      <div className='flex-1 flex justify-center items-center cursor-default min-w-8'>
         {quantity}
       </div>
       <Button
         variant='ghost'
         size='iconSm'
         className='border-l rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
-        onClick={() => incrementIssueQuantity()}
+        disabled={updatingCard}
+        onClick={() => handleChangeQuantity(quantity + 1)}
       >
         <Plus className='h-4 w-4' />
       </Button>

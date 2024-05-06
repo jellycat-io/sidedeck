@@ -100,7 +100,7 @@ export function CardSheet({
       <SheetContent side='bottom' className='pr-8 flex flex-col gap-5'>
         <div className='flex items-start gap-6'>
           <div className='hidden md:block shrink-0'>
-            <CardImage src={card.imageUrl} alt={card.name} width={250} />
+            <CardImage src={card.imageUrl} alt={card.name} />
           </div>
           <div className='flex flex-col space-y-4 w-full'>
             <div className='flex flex-col space-y-3'>

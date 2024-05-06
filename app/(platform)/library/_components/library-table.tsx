@@ -2,7 +2,6 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { removeLibraryCardAction } from '@/actions/platform/library/remove-library-card';
@@ -17,8 +16,6 @@ import { useCurrentUserId } from '@/hooks/use-current-user';
 import { useLibrary } from '@/hooks/use-library';
 import { dateRangeFilterFn, formatDateFromNow } from '@/lib/utils';
 import { LibraryCard } from '@/types/cards';
-
-import { LibraryCardSheet } from './library-card-sheet';
 
 export const columns: ColumnDef<LibraryCard>[] = [
   {
@@ -109,12 +106,10 @@ export const columns: ColumnDef<LibraryCard>[] = [
 
 interface LibraryTableProps {
   data: LibraryCard[];
+  onCardClick: (card: LibraryCard) => void;
 }
 
-export function LibraryTable({ data }: LibraryTableProps) {
-  const [selectedCard, setSelectedCard] = useState<LibraryCard | null>(null);
-  const [openSheet, setOpenSheet] = useState(false);
-
+export function LibraryTable({ data, onCardClick }: LibraryTableProps) {
   const userId = useCurrentUserId();
   const { refreshLibrary } = useLibrary();
   const { execute: removeCards, loading: removingCards } = useAction(
@@ -151,8 +146,7 @@ export function LibraryTable({ data }: LibraryTableProps) {
         pagination
         filtering
         onRowClick={(card) => {
-          setSelectedCard(card);
-          setOpenSheet(true);
+          onCardClick(card);
         }}
         batchActions={[
           {
@@ -173,18 +167,6 @@ export function LibraryTable({ data }: LibraryTableProps) {
           },
         ]}
       />
-      {!!selectedCard && (
-        <LibraryCardSheet
-          cardId={selectedCard.id}
-          open={openSheet}
-          onOpenChange={(open) => {
-            setOpenSheet(open);
-            if (!open) {
-              setSelectedCard(null);
-            }
-          }}
-        />
-      )}
     </>
   );
 }
