@@ -109,10 +109,9 @@ export const columns: ColumnDef<LibraryCard>[] = [
 
 interface LibraryTableProps {
   data: LibraryCard[];
-  loading?: boolean;
 }
 
-export function LibraryTable({ data, loading }: LibraryTableProps) {
+export function LibraryTable({ data }: LibraryTableProps) {
   const [selectedCard, setSelectedCard] = useState<LibraryCard | null>(null);
   const [openSheet, setOpenSheet] = useState(false);
 
@@ -151,7 +150,6 @@ export function LibraryTable({ data, loading }: LibraryTableProps) {
         data={data}
         pagination
         filtering
-        loading={loading}
         onRowClick={(card) => {
           setSelectedCard(card);
           setOpenSheet(true);

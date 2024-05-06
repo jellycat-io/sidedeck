@@ -65,7 +65,6 @@ interface DataTableProps<TData, TValue> {
   pagination?: boolean;
   filtering?: boolean;
   defaultPageSize?: number;
-  loading?: boolean;
   onRowClick?: (row: TData) => void;
   batchActions?: BatchAction<TData>[];
   rowActions?: RowAction<TData>[];
@@ -77,7 +76,6 @@ export function DataTable<TData, TValue>({
   pagination,
   filtering,
   defaultPageSize,
-  loading,
   onRowClick,
   batchActions,
   rowActions,
@@ -118,12 +116,12 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  if (loading) {
+  if (!data.length) {
     return (
       <div className='flex flex-col gap-y-4'>
         <Skeleton className='h-8' />
-        <Skeleton className='h-[353px]' />
-        <Skeleton className='h-8' />
+        <Skeleton className='h-[170px]' />
+        {pagination && <Skeleton className='h-8' />}
       </div>
     );
   }
@@ -167,7 +165,7 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

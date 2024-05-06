@@ -48,31 +48,33 @@ export function LibraryCardSheet({
         <div className='hidden lg:block shrink-0'>
           <CardImage src={card.imageUrl} alt={card.name} width={250} />
         </div>
-        <div className='flex flex-col gap-y-2 overflow-auto pr-2'>
-          <div className='flex items-center space-x-2'>
-            <h3 className='text-xl font-semibold'>{card.name}</h3>
-            <p className='text-sm text-muted-foreground'>
-              {`ID: ${card.cardId}`}
-            </p>
-          </div>
-          <div className='flex items-center space-x-4'>
+        <div className='flex flex-col gap-y-4 overflow-auto pr-2'>
+          <div className='space-y-1'>
             <div className='flex items-center space-x-2'>
-              <p>Total</p>
-              <Badge
-                variant='outline'
-                className='min-w-8 flex items-center justify-center'
-              >
-                {card.quantity}
-              </Badge>
+              <h3 className='text-xl font-semibold'>{card.name}</h3>
+              <p className='text-sm text-muted-foreground'>
+                {`ID: ${card.cardId}`}
+              </p>
             </div>
-            <div className='flex items-center space-x-2'>
-              <p>Issues</p>
-              <Badge
-                variant='outline'
-                className='min-w-8 flex items-center justify-center'
-              >
-                {card.issues.length}
-              </Badge>
+            <div className='flex items-center space-x-4'>
+              <div className='flex items-center space-x-2'>
+                <p>Total owned</p>
+                <Badge
+                  variant='outline'
+                  className='min-w-8 flex items-center justify-center'
+                >
+                  {card.quantity}
+                </Badge>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <p>Issues</p>
+                <Badge
+                  variant='outline'
+                  className='min-w-8 flex items-center justify-center'
+                >
+                  {card.issues.length}
+                </Badge>
+              </div>
             </div>
           </div>
           <LibraryCardIssuesTable cardId={card.id} issues={card.issues} />

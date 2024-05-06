@@ -1,11 +1,12 @@
 import { Column, Table } from '@tanstack/react-table';
-import { Filter } from 'lucide-react';
+import { Eraser, Filter } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -56,6 +57,11 @@ export function DataTableFilterOptions<TData, TValue>({
               {camelCasetoCapitalized(column.id)}
             </DropdownMenuCheckboxItem>
           ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => onFilterChange({})}>
+          <Eraser className='mr-2 h-4 w-4' />
+          Clear filters
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
