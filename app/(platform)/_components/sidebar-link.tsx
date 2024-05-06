@@ -33,7 +33,7 @@ export function SidebarLink({
           variant='ghost'
           size='sm'
           className={cn(
-            'w-full hover:-translate-y-0 justify-start gap-x-2',
+            'w-full justify-start gap-x-2',
             isActive && 'bg-accent text-accent-foreground',
           )}
           disabled={disabled}

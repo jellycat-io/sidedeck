@@ -14,9 +14,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 function isDateInRange(value: string, start: string, end: string) {
-  const date = new Date(value);
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const date = new Date(value).getDate();
+  const startDate = new Date(start).getDate();
+  const endDate = new Date(end).getDate();
 
   return date >= startDate && date <= endDate;
 }

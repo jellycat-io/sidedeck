@@ -89,7 +89,7 @@ export function SidebarBlockItem({
       variant='ghost'
       size='sm'
       className={cn(
-        'w-full hover:-translate-y-0 justify-start',
+        'w-full justify-start',
         isActive && 'bg-accent text-accent-foreground',
       )}
       disabled={disabled}

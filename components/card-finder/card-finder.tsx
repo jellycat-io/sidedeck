@@ -144,7 +144,7 @@ export function CardFinder() {
           ) : (
             <Button
               variant='ghost'
-              className='w-full hover:-translate-y-0 rounded-none'
+              className='w-full rounded-none'
               onClick={() => setPage(page + 1)}
               disabled={!hasMore}
             >

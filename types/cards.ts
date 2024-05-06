@@ -2,35 +2,38 @@ import { z } from 'zod';
 
 import { UserCardSchema } from '@/schemas/card';
 
-export type CardType =
-  | 'effect_monster'
-  | 'fusion_monster'
-  | 'flip_effect_monster'
-  | 'flip_tuner_effect_monster'
-  | 'gemini_monster'
-  | 'link_monster'
-  | 'normal_monster'
-  | 'normal_tuner_monster'
-  | 'pendulum_effect_monster'
-  | 'pendulum_effect_fusion_monster'
-  | 'pendulum_effect_ritual_monster'
-  | 'pendulum_flip_effect_monster'
-  | 'pendulum_normal_monster'
-  | 'pendulum_tuner_effect_monster'
-  | 'ritual_effect_monster'
-  | 'ritual_monster'
-  | 'spell_card'
-  | 'spirit_monster'
-  | 'synchro_monster'
-  | 'synchro_pendulum_effect_monster'
-  | 'synchro_tuner_monster'
-  | 'toon_monster'
-  | 'token'
-  | 'trap_card'
-  | 'tuner_monster'
-  | 'union_effect_monster'
-  | 'xyz_monster'
-  | 'xyz_pendulum_effect_monster';
+export const cardTypes = [
+  'effect_monster',
+  'fusion_monster',
+  'flip_effect_monster',
+  'flip_tuner_effect_monster',
+  'gemini_monster',
+  'link_monster',
+  'normal_monster',
+  'normal_tuner_monster',
+  'pendulum_effect_monster',
+  'pendulum_effect_fusion_monster',
+  'pendulum_effect_ritual_monster',
+  'pendulum_flip_effect_monster',
+  'pendulum_normal_monster',
+  'pendulum_tuner_effect_monster',
+  'ritual_effect_monster',
+  'ritual_monster',
+  'spell_card',
+  'spirit_monster',
+  'synchro_monster',
+  'synchro_pendulum_effect_monster',
+  'synchro_tuner_monster',
+  'toon_monster',
+  'token',
+  'trap_card',
+  'tuner_monster',
+  'union_effect_monster',
+  'xyz_monster',
+  'xyz_pendulum_effect_monster',
+];
+
+export type CardType = (typeof cardTypes)[number];
 
 export type MonsterAttribute =
   | 'dark'
