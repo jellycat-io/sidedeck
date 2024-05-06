@@ -77,7 +77,11 @@ export function LibraryCardSheet({
                   </div>
                 </div>
               </div>
-              <LibraryCardIssuesTable cardId={card.id} issues={card.issues} />
+              <LibraryCardIssuesTable
+                cardId={card.id}
+                issues={card.issues}
+                onRemoveLastIssue={() => handleOpenChange(false)}
+              />
             </div>
           </>
         ) : (

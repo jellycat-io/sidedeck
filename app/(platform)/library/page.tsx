@@ -28,31 +28,36 @@ export default function DashboardPage() {
     <div className='flex flex-col gap-y-4' suppressHydrationWarning>
       <div className='flex justify-between items-center'>
         <h1 className='text-xl font-semibold'>Library</h1>
-        <div className='flex border rounded-md overflow-hidden'>
-          <Button
-            variant='ghost'
-            size='iconSm'
-            className={cn(
-              'rounded-none hover:-translate-y-0',
-              // viewMode === 'table' && 'bg-accent text-accent-foreground',
-            )}
-            onClick={() => setViewMode('table')}
-          >
-            <span className='sr-only'>Table view</span>
-            <Table className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='ghost'
-            size='iconSm'
-            className={cn(
-              'rounded-none hover:-translate-y-0',
-              // viewMode === 'grid' && 'bg-accent text-accent-foreground',
-            )}
-            onClick={() => setViewMode('grid')}
-          >
-            <span className='sr-only'>Grid view</span>
-            <LayoutGrid className='h-4 w-4' />
-          </Button>
+        <div className='flex items-center space-x-4'>
+          <p className='text-sm'>View mode</p>
+          <div className='flex border rounded-md overflow-hidden'>
+            <Button
+              variant='ghost'
+              size='sm'
+              className={cn(
+                'rounded-none h-8 space-x-2',
+                viewMode === 'table' &&
+                  'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+              )}
+              onClick={() => setViewMode('table')}
+            >
+              <span>Table</span>
+              <Table className='h-4 w-4' />
+            </Button>
+            <Button
+              variant='ghost'
+              size='sm'
+              className={cn(
+                'rounded-none h-8 space-x-2',
+                viewMode === 'grid' &&
+                  'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+              )}
+              onClick={() => setViewMode('grid')}
+            >
+              <span>Grid</span>
+              <LayoutGrid className='h-4 w-4' />
+            </Button>
+          </div>
         </div>
       </div>
       {viewMode === 'table' ? (

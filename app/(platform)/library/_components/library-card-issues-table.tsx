@@ -157,20 +157,25 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
 interface LibraryCardIssuesTableProps {
   cardId: string;
   issues: LibraryCardIssue[];
+  onRemoveLastIssue: () => void;
 }
 
 export function LibraryCardIssuesTable({
   cardId,
   issues,
+  onRemoveLastIssue,
 }: LibraryCardIssuesTableProps) {
   const { refreshLibrary } = useLibrary();
   const { execute: removeIssues, loading: removingIssues } = useAction(
     removeIssuesAction,
     {
       onError: toast.error,
-      onSuccess: ({ success }) => {
+      onSuccess: ({ success, removed }) => {
         toast.success(success);
         refreshLibrary();
+        if (removed) {
+          onRemoveLastIssue();
+        }
       },
     },
   );
@@ -318,7 +323,7 @@ export function QuantityButtonsGroup({
       <Button
         variant='ghost'
         size='iconSm'
-        className='border-r rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
+        className='border-r rounded-none flex-1 focus-visible:ring-none h-8 w-8'
         disabled={updatingCard || quantity === 1}
         onClick={() => handleChangeQuantity(quantity - 1)}
       >
@@ -330,7 +335,7 @@ export function QuantityButtonsGroup({
       <Button
         variant='ghost'
         size='iconSm'
-        className='border-l rounded-none flex-1 focus-visible:ring-none hover:-translate-y-0 h-8 w-8'
+        className='border-l rounded-none flex-1 focus-visible:ring-none h-8 w-8'
         disabled={updatingCard}
         onClick={() => handleChangeQuantity(quantity + 1)}
       >

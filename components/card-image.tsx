@@ -10,8 +10,16 @@ interface CardImageProps {
   src: string;
   alt: string;
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  onClick?: () => void;
 }
-export function CardImage({ src, alt, size = 'md' }: CardImageProps) {
+export function CardImage({
+  src,
+  alt,
+  size = 'md',
+  className,
+  onClick,
+}: CardImageProps) {
   const [loading, setLoading] = useState(true);
 
   // Event handler for image loading completion
@@ -35,7 +43,7 @@ export function CardImage({ src, alt, size = 'md' }: CardImageProps) {
   const height = (width / 5) * 7;
 
   return (
-    <>
+    <div className='relative rounded-lg overflow-hidden'>
       {loading && (
         <Skeleton
           className={cn(
@@ -58,8 +66,13 @@ export function CardImage({ src, alt, size = 'md' }: CardImageProps) {
         style={{
           display: loading ? 'none' : 'block',
         }}
-        className='rounded-lg'
+        className={cn(
+          className,
+          `overflow-hidden`,
+          onClick && 'transition cursor-pointer hover:opacity-50',
+        )}
+        onClick={onClick}
       />
-    </>
+    </div>
   );
 }

@@ -325,11 +325,7 @@ function CardIssuesTable({ userId, card, onAdd }: CardIssuesTableProps) {
             <TableCell className='w-10'>
               <Popover onOpenChange={handleOpenChange}>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant='ghost'
-                    size='iconSm'
-                    className='hover:-translate-y-0'
-                  >
+                  <Button variant='ghost' size='iconSm'>
                     <MoreHorizontal className='h-4 w-4' />
                   </Button>
                 </PopoverTrigger>
