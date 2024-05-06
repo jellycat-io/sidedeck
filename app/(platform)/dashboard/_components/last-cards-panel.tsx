@@ -19,13 +19,13 @@ import { DashboardPanel } from './dashboard-panel';
 
 export function LastCardsPanel() {
   const [cards, setCards] = useState<LibraryCard[]>([]);
-  const { cards: libraryCards, loading, getLastCards } = useLibrary();
+  const { cards: libraryCards, getLastCards } = useLibrary();
 
   useEffect(() => {
     setCards(getLastCards());
   }, [libraryCards, getLastCards]);
 
-  if (!cards?.length && loading) {
+  if (!cards?.length) {
     return <Skeleton className='h-[260px]' />;
   }
 

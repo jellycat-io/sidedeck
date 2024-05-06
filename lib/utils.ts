@@ -13,6 +13,34 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+function isDateInRange(value: string, start: string, end: string) {
+  const date = new Date(value);
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return date >= startDate && date <= endDate;
+}
+
+export function dateRangeFilterFn(row: any, id: string, filterValue: any) {
+  if (!filterValue.start && !filterValue.end) return true;
+
+  const endDateString = filterValue.end ?? new Date().toISOString();
+
+  return isDateInRange(row.original[id], filterValue.start, endDateString);
+}
+
+/**
+ * Converts a camel case string to capitalized
+ * @param str the camel case string to convert to capitalized
+ * @returns the capitalized string
+ */
+export function camelCasetoCapitalized(str: string) {
+  return str
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (s) => s.toUpperCase())
+    .trim();
+}
+
 /**
  * Converts a snake case string to capitalized
  * @example snakeCaseToCapitalized('hello_world') // 'Hello World'

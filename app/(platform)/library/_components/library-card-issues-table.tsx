@@ -60,6 +60,10 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         <TooltipContent>{cell.row.original.set.setName}</TooltipContent>
       </Tooltip>
     ),
+    filterFn: (row, id, value) => row.original.set.setCode.includes(value),
+    meta: {
+      filterVariant: 'text',
+    },
   },
   {
     accessorKey: 'rarity',
@@ -71,6 +75,14 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         {codeToRarityName(cell.row.original.rarity)}
       </div>
     ),
+    filterFn: (row, id, value) => {
+      if (value === 'all') return true;
+
+      return row.original.rarity === value;
+    },
+    meta: {
+      filterVariant: 'select',
+    },
   },
   {
     accessorKey: 'language',
@@ -82,6 +94,14 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         <FlagIcon locale={cell.row.original.language} />
       </div>
     ),
+    filterFn: (row, id, value) => {
+      if (value === 'all') return true;
+
+      return row.original.language === value;
+    },
+    meta: {
+      filterVariant: 'select',
+    },
   },
   {
     accessorKey: 'quantity',
@@ -92,6 +112,7 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         quantity={cell.row.original.quantity}
       />
     ),
+    enableColumnFilter: false,
   },
   {
     accessorKey: 'tradeable',
@@ -105,6 +126,10 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
         )}
       </div>
     ),
+    filterFn: (row, id, value) => !!row.original.tradeable === !!value,
+    meta: {
+      filterVariant: 'boolean',
+    },
   },
   {
     accessorKey: 'createdAt',
@@ -112,6 +137,9 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
       <DataTableColumnHeader column={column} title='Added' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
+    meta: {
+      filterVariant: 'date',
+    },
   },
   {
     accessorKey: 'updatedAt',
@@ -119,6 +147,9 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
       <DataTableColumnHeader column={column} title='Updated' />
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
+    meta: {
+      filterVariant: 'date',
+    },
   },
 ];
 
@@ -191,6 +222,7 @@ export function LibraryCardIssuesTable({
       columns={columns}
       data={issues}
       pagination
+      filtering
       defaultPageSize={3}
       batchActions={[
         {
