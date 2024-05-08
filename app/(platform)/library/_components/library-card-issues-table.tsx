@@ -19,7 +19,7 @@ import {
 import { useAction } from '@/hooks/use-action';
 import { useLibrary } from '@/hooks/use-library';
 import { codeToRarityName, formatDateFromNow } from '@/lib/utils';
-import { LibraryCardIssue } from '@/types/cards';
+import { LibraryCardIssue } from '@/types/card';
 
 export const columns: ColumnDef<LibraryCardIssue>[] = [
   {

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { CardImage } from '@/components/card-image';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { useCards } from '@/hooks/use-cards';
 import { useLibrary } from '@/hooks/use-library';
 
 import { LibraryCardIssuesTable } from './library-card-issues-table';
@@ -22,6 +23,7 @@ export function LibraryCardSheet({
 }: LibraryCardSheetProps) {
   const [mounted, setMounted] = useState(false);
   const { getCard } = useLibrary();
+  const { toggleFinder } = useCards();
 
   useEffect(() => {
     setMounted(true);
@@ -33,6 +35,9 @@ export function LibraryCardSheet({
 
   function handleOpenChange(open: boolean) {
     onOpenChange(open);
+    if (!open) {
+      toggleFinder(true);
+    }
   }
 
   const card = getCard(cardId);
@@ -46,7 +51,11 @@ export function LibraryCardSheet({
         {card ? (
           <>
             <div className='hidden lg:block shrink-0'>
-              <CardImage src={card.imageUrl} alt={card.name} />
+              <CardImage
+                src={card.imageUrl}
+                alt={card.name}
+                banStatus={card.banlistInfo?.ban_tcg}
+              />
             </div>
             <div className='flex flex-col gap-y-4 overflow-auto pr-2'>
               <div className='space-y-1'>

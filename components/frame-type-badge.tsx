@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { getFrametypeColors, snakeCaseToCapitalized } from '@/lib/utils';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 interface FrameTypeBadgeProps {
   card: Pick<LibraryCard, 'slug' | 'frameType' | 'type'>;

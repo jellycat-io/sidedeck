@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { CardLanguage } from '@/types/cards';
+import { CardLanguage } from '@/types/card';
 
 interface FlagIconProps {
   locale: CardLanguage;

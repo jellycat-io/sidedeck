@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { getCards, getUserCards, toLibraryCard } from '@/data/card';
 import { FetchState, createSafeFetch } from '@/lib/create-safe-fetch';
 import { GetLibraryCardsSchema } from '@/schemas/card';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 export type GetLibraryCardsInput = z.infer<typeof GetLibraryCardsSchema>;
 export type GetLibraryCardsResponse = FetchState<LibraryCard[]>;

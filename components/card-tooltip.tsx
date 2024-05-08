@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 interface CardTooltipProps {
   card: LibraryCard;
@@ -23,7 +23,11 @@ export function CardTooltip({ card }: CardTooltipProps) {
               <span>{card.name}</span>
             </TooltipTrigger>
             <TooltipContent className='p-0 bg-transparent'>
-              <CardImage src={card.imageUrl} alt={card.name} />
+              <CardImage
+                src={card.imageUrl}
+                banStatus={card.banlistInfo?.ban_tcg}
+                alt={card.name}
+              />
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

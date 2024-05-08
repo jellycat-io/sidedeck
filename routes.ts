@@ -32,6 +32,12 @@ export const Routes = {
   platform: {
     dashboard: '/dashboard',
     library: '/library',
+    deck: {
+      list: '/deck/list',
+      create: '/deck/build',
+      view: (id: string) => `/deck/${id}/view`,
+      edit: (id: string) => `/deck/${id}/build`,
+    },
   },
   auth: {
     login: '/auth/login',

@@ -10,10 +10,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { cn, snakeCaseToCapitalized } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 interface SidebarBlockProps {
   id: string;
+  label: string;
   icon?: React.ReactNode;
   disabled?: boolean;
   isExpanded: boolean;
@@ -23,6 +24,7 @@ interface SidebarBlockProps {
 
 export function SidebarBlock({
   id,
+  label,
   icon,
   disabled,
   isExpanded,
@@ -46,11 +48,11 @@ export function SidebarBlock({
       >
         <div className='flex items-center gap-x-2'>
           {icon}
-          {snakeCaseToCapitalized(id)}
+          {label}
         </div>
       </AccordionTrigger>
       {!disabled && (
-        <AccordionContent>
+        <AccordionContent className='pt-1 space-y-1'>
           {items.map((item) => (
             <div key={item.href} className='w-full pl-4'>
               <SidebarBlockItem
@@ -85,19 +87,19 @@ export function SidebarBlockItem({
   const isActive = useMemo(() => pathname === href, [pathname, href]);
 
   return (
-    <Button
-      variant='ghost'
-      size='sm'
-      className={cn(
-        'w-full justify-start',
-        isActive && 'bg-accent text-accent-foreground',
-      )}
-      disabled={disabled}
-    >
-      <Link href={href} className='flex items-center gap-x-2'>
+    <Link href={href} className='flex items-center'>
+      <Button
+        variant='ghost'
+        size='sm'
+        className={cn(
+          'w-full justify-start gap-x-2',
+          isActive && 'bg-accent text-accent-foreground',
+        )}
+        disabled={disabled}
+      >
         {icon}
         {label}
-      </Link>
-    </Button>
+      </Button>
+    </Link>
   );
 }

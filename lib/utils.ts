@@ -7,7 +7,7 @@ import {
   CardRarityCode,
   CardRarityName,
   LibraryCard,
-} from '@/types/cards';
+} from '@/types/card';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

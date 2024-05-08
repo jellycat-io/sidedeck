@@ -5,9 +5,13 @@ import { useMemo, useState } from 'react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { BanStatus } from '@/types/card';
+
+import { BanIcon } from './ban-icon';
 
 interface CardImageProps {
   src: string;
+  banStatus?: BanStatus;
   alt: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
@@ -15,6 +19,7 @@ interface CardImageProps {
 }
 export function CardImage({
   src,
+  banStatus,
   alt,
   size = 'md',
   className,
@@ -68,11 +73,16 @@ export function CardImage({
         }}
         className={cn(
           className,
-          `overflow-hidden`,
+          `overflow-hidden rounded-lg`,
           onClick && 'transition cursor-pointer hover:opacity-50',
         )}
         onClick={onClick}
       />
+      {banStatus && !loading && (
+        <>
+          <BanIcon status={banStatus} className='absolute top-2 left-2 z-20' />
+        </>
+      )}
     </div>
   );
 }

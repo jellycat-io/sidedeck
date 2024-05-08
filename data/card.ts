@@ -6,7 +6,7 @@ import {
   UserCardSchema,
   UserCardsSchema,
 } from '@/schemas/card';
-import { ApiCard, LibraryCard, UserCard } from '@/types/cards';
+import { ApiCard, LibraryCard, UserCard } from '@/types/card';
 
 const CARDS_URL = `${process.env.NEXT_PUBLIC_VERCEL_URL?.includes('localhost') ? process.env.NEXT_PUBLIC_VERCEL_URL : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`}/cards.json`;
 
@@ -212,6 +212,7 @@ export function toLibraryCard(
       a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0,
     ),
     quantity: userCard.issues.reduce((acc, issue) => acc + issue.quantity, 0),
+    cardPrices: card.cardPrices,
   } satisfies LibraryCard;
 
   const validated = LibraryCardSchema.safeParse(libraryCard);
