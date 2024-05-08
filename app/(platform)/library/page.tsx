@@ -4,6 +4,7 @@ import { LayoutGrid, Table } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { useCards } from '@/hooks/use-cards';
 import { useLibrary } from '@/hooks/use-library';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { cn } from '@/lib/utils';
@@ -22,7 +23,8 @@ export default function DashboardPage() {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
-  const { cards } = useLibrary();
+  const { cards, loading } = useLibrary();
+  const { toggleFinder } = useCards();
 
   return (
     <div className='flex flex-col gap-y-4' suppressHydrationWarning>
@@ -63,17 +65,21 @@ export default function DashboardPage() {
       {viewMode === 'table' ? (
         <LibraryTable
           data={cards}
+          loading={loading}
           onCardClick={(card) => {
             setSelectedCardId(card.id);
             setOpenDetails(true);
+            toggleFinder(false);
           }}
         />
       ) : (
         <LibraryGrid
           cards={cards}
+          loading={loading}
           onCardClick={(card) => {
             setSelectedCardId(card.id);
             setOpenDetails(true);
+            toggleFinder(false);
           }}
         />
       )}

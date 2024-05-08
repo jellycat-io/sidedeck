@@ -15,7 +15,7 @@ import { useAction } from '@/hooks/use-action';
 import { useCurrentUserId } from '@/hooks/use-current-user';
 import { useLibrary } from '@/hooks/use-library';
 import { dateRangeFilterFn, formatDateFromNow } from '@/lib/utils';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 export const columns: ColumnDef<LibraryCard>[] = [
   {
@@ -106,10 +106,15 @@ export const columns: ColumnDef<LibraryCard>[] = [
 
 interface LibraryTableProps {
   data: LibraryCard[];
+  loading?: boolean;
   onCardClick: (card: LibraryCard) => void;
 }
 
-export function LibraryTable({ data, onCardClick }: LibraryTableProps) {
+export function LibraryTable({
+  data,
+  loading,
+  onCardClick,
+}: LibraryTableProps) {
   const userId = useCurrentUserId();
   const { refreshLibrary } = useLibrary();
   const { execute: removeCards, loading: removingCards } = useAction(
@@ -143,8 +148,10 @@ export function LibraryTable({ data, onCardClick }: LibraryTableProps) {
       <DataTable
         columns={columns}
         data={data}
+        loading={loading}
         pagination
         filtering
+        noDataMessage='No cards found. Use the Card Finder to add cards to your library.'
         onRowClick={(card) => {
           onCardClick(card);
         }}

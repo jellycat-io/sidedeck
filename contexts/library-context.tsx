@@ -5,7 +5,7 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import { getLibraryCardsAction } from '@/actions/platform/library/get-library-cards';
 import { useCurrentUserId } from '@/hooks/use-current-user';
 import { useFetch } from '@/hooks/use-fetch';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 interface LibraryContextValue {
   cards: LibraryCard[];

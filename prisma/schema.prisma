@@ -11,6 +11,7 @@ model UserCard {
   id        String   @id @default(cuid())
   userId    String
   cardId    String
+  quantity  Int      @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   issues    Json[]
@@ -19,18 +20,51 @@ model UserCard {
   @@index([cardId])
 }
 
+model Deck {
+  id           String   @id @default(cuid())
+  userId       String
+  title        String
+  slug         String
+  description  String?
+  type         String
+  valid        Boolean  @default(false)
+  mainCardIds  String[]
+  extraCardIds String[]
+  sideCardIds  String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model WishListItem {
+  id        String   @id @default(cuid())
+  userId    String
+  cardId    String
+  quantity  Int
+  deckIds   String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+}
+
 model User {
-  id            String     @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String
-  email         String     @unique
+  email         String         @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  konamiId      String?    @unique
+  konamiId      String?        @unique
   accounts      Account[]
   cards         UserCard[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  decks         Deck[]
+  wishlist      WishListItem[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([email])
 }

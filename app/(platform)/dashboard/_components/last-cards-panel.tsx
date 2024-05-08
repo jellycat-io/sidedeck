@@ -13,7 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useLibrary } from '@/hooks/use-library';
-import { LibraryCard } from '@/types/cards';
+import { LibraryCard } from '@/types/card';
 
 import { DashboardPanel } from './dashboard-panel';
 

@@ -62,6 +62,8 @@ export type RowAction<TData> = {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  noDataMessage?: string;
+  loading?: boolean;
   pagination?: boolean;
   filtering?: boolean;
   defaultPageSize?: number;
@@ -73,6 +75,8 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  noDataMessage,
+  loading,
   pagination,
   filtering,
   defaultPageSize,
@@ -116,7 +120,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  if (!data.length) {
+  if (loading && !data.length) {
     return (
       <div className='flex flex-col gap-y-4'>
         <Skeleton className='h-8' />
@@ -204,7 +208,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  {noDataMessage ?? 'No data available'}
                 </TableCell>
               </TableRow>
             )}

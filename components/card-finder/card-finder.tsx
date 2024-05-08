@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/command';
 import { useCards } from '@/hooks/use-cards';
 import { useDebounce } from '@/hooks/use-debounce';
-import { ApiCard } from '@/types/cards';
+import { ApiCard } from '@/types/card';
 
 import { CardSheet } from './card-sheet';
 
@@ -35,7 +35,7 @@ export function CardFinder() {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
 
-  const { cards: apiCards, getQueryCards } = useCards();
+  const { cards: apiCards, getQueryCards, isFinderEnabled } = useCards();
 
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
@@ -44,11 +44,14 @@ export function CardFinder() {
       }
     };
 
-    document.addEventListener('keydown', down);
+    if (isFinderEnabled) {
+      document.addEventListener('keydown', down);
+    }
+
     return () => {
       document.removeEventListener('keydown', down);
     };
-  }, [openFinder]);
+  }, [openFinder, isFinderEnabled]);
 
   const fetchCards = useCallback(
     async (pageNum: number, isInitial = false) => {
@@ -59,7 +62,6 @@ export function CardFinder() {
           limit: PAGE_SIZE,
           page: pageNum,
         });
-        console.log(fetchedCards, totalCount);
         setTotalQueryCount(totalCount);
         setCards((prev) =>
           isInitial ? fetchedCards : [...prev, ...fetchedCards],

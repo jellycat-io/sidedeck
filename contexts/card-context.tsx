@@ -4,11 +4,13 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 
 import { getCardsAction } from '@/actions/platform/get-cards';
 import { useFetch } from '@/hooks/use-fetch';
-import { ApiCard } from '@/types/cards';
+import { ApiCard } from '@/types/card';
 
 interface CardContextValue {
   cards: ApiCard[];
   loading: boolean;
+  isFinderEnabled: boolean;
+  toggleFinder: (enabled: boolean) => void;
   getCard: (id: string) => ApiCard | undefined;
   getQueryCards: ({
     query,
@@ -28,6 +30,8 @@ interface CardContextValue {
 export const CardContext = createContext<CardContextValue>({
   cards: [],
   loading: false,
+  isFinderEnabled: true,
+  toggleFinder: () => undefined,
   getCard: () => undefined,
   getQueryCards: () => ({
     cards: [],
@@ -41,6 +45,7 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
 
   const [cards, setCards] = useState<ApiCard[]>(apiCards || []);
   const [loading, setLoading] = useState<boolean>(loadingCards);
+  const [isFinderEnabled, setIsFinderEnabled] = useState<boolean>(true);
 
   useEffect(() => {
     if (apiCards && !loading) {
@@ -91,11 +96,17 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
     [cards, loading],
   );
 
+  function toggleFinder(enabled: boolean) {
+    setIsFinderEnabled(enabled);
+  }
+
   return (
     <CardContext.Provider
       value={{
         cards,
         loading,
+        isFinderEnabled,
+        toggleFinder,
         getCard,
         getQueryCards,
       }}

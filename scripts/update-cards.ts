@@ -15,7 +15,7 @@ import {
   FrameType,
   LinkMarker,
   MonsterAttribute,
-} from '@/types/cards';
+} from '@/types/card';
 
 dotenv.config();
 
@@ -69,7 +69,7 @@ type ApiResponse = {
 const log = console.log;
 
 const API_URL = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
-const CARDS_JSON_PATH = path.join(process.cwd(), 'cards.json');
+const CARDS_JSON_PATH = path.join(process.cwd(), '/public/cards.json');
 
 async function fetchCards(): Promise<ApiCardData[]> {
   try {
@@ -245,8 +245,11 @@ async function updateCards(): Promise<void> {
     const updatedCards = await Promise.all(uploadPromises);
     const allCards = [...storedCards, ...updatedCards];
 
-    await saveCards(allCards);
+    const { patchedCards, totalPatched } = await patchCards(allCards);
 
+    await saveCards(patchedCards);
+
+    log(chalk.yellow(`Total cards patched: ${totalPatched}`));
     log(chalk.green(`Total cards stored after update: ${allCards.length}`));
   } catch (error) {
     log(
@@ -255,6 +258,31 @@ async function updateCards(): Promise<void> {
       ),
     );
   }
+}
+
+function patchCards(
+  cards: ApiCard[],
+): Promise<{ patchedCards: ApiCard[]; totalPatched: number }> {
+  let count = 0;
+  return new Promise((resolve, reject) => {
+    try {
+      log(chalk.blue(`Patching cards...`));
+      for (const card of cards) {
+        if (card.id === '90448279') {
+          log(chalk.yellow(`Patching card: ${card.name}`));
+          card.banlistInfo = !!card.banlistInfo
+            ? { ...card.banlistInfo, ban_tcg: 'Limited' }
+            : { ban_tcg: 'Limited' };
+          log(chalk.green(`Card patched!`));
+          count++;
+        }
+      }
+
+      resolve({ patchedCards: cards, totalPatched: count });
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 updateCards().catch(console.error);

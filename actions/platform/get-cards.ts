@@ -2,7 +2,7 @@
 
 import { getCards } from '@/data/card';
 import { FetchState, createSafeFetch } from '@/lib/create-safe-fetch';
-import { ApiCard } from '@/types/cards';
+import { ApiCard } from '@/types/card';
 
 export type GetCardsResponse = FetchState<ApiCard[]>;
 

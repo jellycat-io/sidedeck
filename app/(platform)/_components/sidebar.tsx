@@ -1,8 +1,9 @@
 'use client';
 
-import { Archive, Gauge, LibraryBig } from 'lucide-react';
+import { Archive, Gauge, LibraryBig, PencilRuler } from 'lucide-react';
 
 import { Accordion } from '@/components/ui/accordion';
+import { useDecks } from '@/hooks/use-decks';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Routes } from '@/routes';
 
@@ -20,6 +21,8 @@ export function Sidebar({ storageKey = 'sd-sidebar-state' }: SidebarProps) {
     storageKey,
     {},
   );
+
+  const { decks } = useDecks();
 
   const defaultAccordionValues: string[] = Object.keys(expanded).reduce(
     (acc: string[], key: string) => {
@@ -54,7 +57,7 @@ export function Sidebar({ storageKey = 'sd-sidebar-state' }: SidebarProps) {
           href={Routes.platform.library}
           icon={<LibraryBig className='h-4 w-4' />}
         >
-          Library
+          My Library
         </SidebarLink>
       </div>
       <Accordion
@@ -63,23 +66,22 @@ export function Sidebar({ storageKey = 'sd-sidebar-state' }: SidebarProps) {
         className='space-y-2'
       >
         <SidebarBlock
-          id='decks'
+          id='my-decks'
+          label='My decks'
           icon={<Archive className='h-4 w-4' />}
           isExpanded={expanded['decks']}
           onExpand={onExpand}
-          items={
-            [
-              // TODO: Decks
-              // {
-              //   label: 'All Decks',
-              //   href: '/decks',
-              // },
-              // {
-              //   label: 'Create Deck',
-              //   href: '/decks/create',
-              // },
-            ]
-          }
+          items={[
+            ...decks.map((deck) => ({
+              label: deck.title,
+              href: Routes.platform.deck.edit(deck.id),
+            })),
+            {
+              label: 'Build a Deck',
+              icon: <PencilRuler className='h-4 w-4' />,
+              href: Routes.platform.deck.create,
+            },
+          ]}
         />
       </Accordion>
     </>

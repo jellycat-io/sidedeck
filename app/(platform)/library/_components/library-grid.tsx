@@ -33,8 +33,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { camelCasetoCapitalized, snakeCaseToCapitalized } from '@/lib/utils';
-import { LibraryCard, cardTypes } from '@/types/cards';
+import { CARD_TYPES, LibraryCard } from '@/types/card';
 
 type Filter = {
   key: string;
@@ -60,7 +61,7 @@ const filters: Filter[] = [
 
       return card.type === value;
     },
-    filterOptions: cardTypes,
+    filterOptions: CARD_TYPES,
   },
   {
     key: 'createdAt',
@@ -90,10 +91,11 @@ const initialFilters: AppliedFilters = {
 
 interface LibraryGridProps {
   cards: LibraryCard[];
+  loading?: boolean;
   onCardClick: (card: LibraryCard) => void;
 }
 
-export function LibraryGrid({ cards, onCardClick }: LibraryGridProps) {
+export function LibraryGrid({ cards, loading, onCardClick }: LibraryGridProps) {
   const [page, setPage] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(10);
 
@@ -152,6 +154,16 @@ export function LibraryGrid({ cards, onCardClick }: LibraryGridProps) {
     (filter) => !filter.visible,
   );
 
+  if (loading && !cards.length) {
+    return (
+      <div className='pr-4 flex flex-wrap justify-center gap-3'>
+        {[...Array(cardsPerPage)].map((_, index) => (
+          <Skeleton key={index} className='w-[175px] h-[255px]' />
+        ))}
+      </div>
+    );
+  }
+
   // TODO: Fix hydration
   return (
     <>
@@ -169,23 +181,26 @@ export function LibraryGrid({ cards, onCardClick }: LibraryGridProps) {
           onFilterChange={setAppliedFilters}
         />
       )}
-      {!!cards.length && (
-        <ScrollArea className='h-[516px]'>
-          <div
-            className='pr-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-x-2 gap-y-3'
-            suppressHydrationWarning
-          >
+      {!!cards.length ? (
+        <ScrollArea className='h-[524px]'>
+          <div className='pr-4 flex flex-wrap justify-center gap-3'>
             {paginatedCards.map((card) => (
               <CardImage
                 key={card.id}
                 onClick={() => onCardClick(card)}
                 src={card.imageUrl}
                 alt={card.name}
+                banStatus={card.banlistInfo?.ban_tcg}
                 size='sm'
+                className='shrink-0'
               />
             ))}
           </div>
         </ScrollArea>
+      ) : (
+        <div className='flex justify-center items-center h-[524px]'>
+          No cards found. Use the Card Finder to add cards to your library.
+        </div>
       )}
       <div className='flex items-center justify-between'>
         <div className='flex-1 text-sm text-muted-foreground'>
