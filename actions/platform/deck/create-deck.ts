@@ -18,6 +18,10 @@ export type CreateDeckResponse = ActionState<
 async function handler({
   userId,
   values,
+  mainCards,
+  extraCards,
+  sideCards,
+  valid,
 }: CreateDeckInput): Promise<CreateDeckResponse> {
   if (!userId) {
     return {
@@ -25,7 +29,14 @@ async function handler({
     };
   }
 
-  const deck = await createDeck(userId, values);
+  const deck = await createDeck(
+    userId,
+    values,
+    mainCards,
+    extraCards,
+    sideCards,
+    valid,
+  );
 
   if (!deck) {
     return {

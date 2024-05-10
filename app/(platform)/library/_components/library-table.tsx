@@ -60,7 +60,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Type' />
     ),
-    cell: (cell) => <FrameTypeBadge card={cell.row.original} />,
+    cell: (cell) => <FrameTypeBadge card={cell.row.original} withLabel />,
     filterFn: (row, id, value) => {
       if (value === 'all') return true;
 

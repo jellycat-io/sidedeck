@@ -8,7 +8,7 @@ export function FormSuccess({ message }: FormSuccessProps) {
   if (!message) return null;
 
   return (
-    <div className='flex items-center gap-x-2 text-sm p-2 rounded-md bg-emerald-500/15 text-emerald-500'>
+    <div className='flex items-center gap-x-2 text-sm p-2 rounded-md bg-success/15 text-success'>
       <CircleCheck className='h-8 w-8' />
       <p>{message}</p>
     </div>

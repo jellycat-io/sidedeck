@@ -131,7 +131,7 @@ export function CardFinder() {
                   className='flex items-center justify-between'
                 >
                   <span>{card.name}</span>
-                  <FrameTypeBadge card={card} />
+                  <FrameTypeBadge card={card} withLabel />
                 </CommandItem>
               ))}
           </CommandGroup>

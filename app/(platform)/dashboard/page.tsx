@@ -8,7 +8,7 @@ export default function DashboardPage() {
   const { session } = useCurrentSession();
 
   return (
-    <div className='space-y-8'>
+    <div className='px-8 py-6 space-y-8'>
       <h1 className='text-xl font-semibold'>Hello {session?.user.name}</h1>
       <div className='grid lg:grid-cols-2 2xl:grid-cols-3'>
         <LastCardsPanel />

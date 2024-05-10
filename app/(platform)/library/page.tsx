@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const { toggleFinder } = useCards();
 
   return (
-    <div className='flex flex-col gap-y-4' suppressHydrationWarning>
+    <div className='px-8 py-6 flex flex-col gap-y-4' suppressHydrationWarning>
       <div className='flex justify-between items-center'>
         <h1 className='text-xl font-semibold'>Library</h1>
         <div className='flex items-center space-x-4'>

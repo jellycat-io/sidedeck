@@ -14,6 +14,14 @@ interface LibraryContextValue {
   getLastCards: () => LibraryCard[];
   getLibraryCard: (id: string) => LibraryCard | undefined;
   getIssueCardId: (issueId: string) => string | undefined;
+  checkLibraryCard: (
+    id: string,
+    targetQuantity: number,
+  ) => {
+    exists: boolean;
+    hasEnough: boolean;
+    quantity: number;
+  };
   getCard: (id: string) => LibraryCard | undefined;
 }
 
@@ -24,6 +32,11 @@ export const LibraryContext = createContext<LibraryContextValue>({
   getLastCards: () => [],
   getLibraryCard: () => undefined,
   getIssueCardId: () => undefined,
+  checkLibraryCard: () => ({
+    exists: false,
+    hasEnough: false,
+    quantity: 0,
+  }),
   getCard: () => undefined,
 });
 
@@ -79,6 +92,27 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
     [cards],
   );
 
+  const checkLibraryCard = useCallback(
+    (id: string, targetQuantity: number) => {
+      const card = cards.find((card) => card.cardId === id);
+
+      if (!card) {
+        return {
+          exists: false,
+          hasEnough: false,
+          quantity: 0,
+        };
+      }
+
+      return {
+        exists: true,
+        hasEnough: card.quantity >= targetQuantity,
+        quantity: card.quantity,
+      };
+    },
+    [cards],
+  );
+
   return (
     <LibraryContext.Provider
       value={{
@@ -89,6 +123,7 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
         getLibraryCard,
         getIssueCardId,
         getCard,
+        checkLibraryCard,
       }}
     >
       {children}
