@@ -7,20 +7,39 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { LibraryCard } from '@/types/card';
+import { cn } from '@/lib/utils';
+import { getFrametypeColors } from '@/lib/utils';
+import { ApiCard, LibraryCard } from '@/types/card';
 
 interface CardTooltipProps {
-  card: LibraryCard;
+  card: LibraryCard | ApiCard;
+  isColorCoded?: boolean;
+  className?: string;
 }
 
-export function CardTooltip({ card }: CardTooltipProps) {
+export function CardTooltip({
+  card,
+  isColorCoded,
+  className,
+}: CardTooltipProps) {
   return (
     <>
       {card && (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span>{card.name}</span>
+              <span
+                className={cn(
+                  className,
+                  isColorCoded && 'text-[hsl(var(--frame))] font-medium',
+                )}
+                style={{
+                  // @ts-ignore
+                  '--frame': getFrametypeColors(card).bg,
+                }}
+              >
+                {card.name}
+              </span>
             </TooltipTrigger>
             <TooltipContent className='p-0 bg-transparent'>
               <CardImage

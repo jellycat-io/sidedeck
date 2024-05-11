@@ -52,7 +52,7 @@ export function LastCardsPanel() {
                     {card.name}
                   </TableCell>
                   <TableCell className=' hidden xl:block'>
-                    <FrameTypeBadge card={card} />
+                    <FrameTypeBadge card={card} withLabel />
                   </TableCell>
                   <TableCell className='text-center'>{card.quantity}</TableCell>
                 </TableRow>

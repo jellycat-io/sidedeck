@@ -101,7 +101,7 @@ export function getFrametypeColors(
       };
     case 'fusion':
       return {
-        bg: '270 25% 62%',
+        bg: '291 38% 45%',
         text: '0 0% 3.9%',
       };
     case 'ritual':
@@ -121,7 +121,7 @@ export function getFrametypeColors(
       };
     case 'link':
       return {
-        bg: '240 100% 27%',
+        bg: '210 77% 29%',
         text: '0 0% 98%',
       };
     case 'normal_pendulum':

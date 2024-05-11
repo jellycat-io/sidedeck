@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { db } from '@/lib/db';
 import { DeckInputSchema } from '@/schemas/deck';
+import { DeckCard } from '@/types/deck';
 
 export async function getDecks() {
   try {
@@ -59,12 +60,20 @@ export async function getUserDeck(userId: string, deckId: string) {
 export async function createDeck(
   userId: string,
   data: z.infer<typeof DeckInputSchema>,
+  mainCards: DeckCard[],
+  extraCards: DeckCard[],
+  sideCards: DeckCard[],
+  valid?: boolean,
 ) {
   try {
     return await db.deck.create({
       data: {
         userId,
         ...data,
+        mainCards,
+        extraCards,
+        sideCards,
+        valid,
       },
     });
   } catch (error) {
@@ -76,13 +85,23 @@ export async function createDeck(
 export async function updateDeck(
   deckId: string,
   values: z.infer<typeof DeckInputSchema>,
+  mainCards: DeckCard[],
+  extraCards: DeckCard[],
+  sideCards: DeckCard[],
+  valid?: boolean,
 ) {
   try {
     return await db.deck.update({
       where: {
         id: deckId,
       },
-      data: values,
+      data: {
+        ...values,
+        mainCards,
+        extraCards,
+        sideCards,
+        valid,
+      },
     });
   } catch (error) {
     console.error(error);

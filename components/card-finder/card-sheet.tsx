@@ -162,7 +162,7 @@ export function CardSheet({
                     {card.atk}
                   </p>
                 )}
-                {card.atk !== undefined && (
+                {card.def !== undefined && (
                   <p className='flex items-center gap-x-1.5 text-sm'>
                     <Shield className='h-5 w-5 fill-foreground' />
                     {card.def}
@@ -322,7 +322,7 @@ function CardIssuesTable({ userId, card, onAdd }: CardIssuesTableProps) {
               {set.set_rarity}
             </TableCell>
             <TableCell className='w-32'>
-              <Badge variant='outline'>
+              <Badge>
                 {Number(set.set_price) ? `€ ${set.set_price}` : 'N/A'}
               </Badge>
             </TableCell>

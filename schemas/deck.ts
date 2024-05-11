@@ -4,6 +4,11 @@
 
 import { z } from 'zod';
 
+export const DeckCardSchema = z.object({
+  id: z.string(),
+  quantity: z.number(),
+});
+
 export const DeckTypeSchema = z.union([
   z.literal('midrange'),
   z.literal('control'),
@@ -22,20 +27,20 @@ export const DeckSchema = z.object({
   description: z.string().optional(),
   type: DeckTypeSchema,
   valid: z.boolean(),
-  mainCardIds: z.array(z.string()),
-  extraCardIds: z.array(z.string()),
-  sideCardIds: z.array(z.string()),
+  mainCards: z.array(DeckCardSchema),
+  extraCards: z.array(DeckCardSchema),
+  sideCards: z.array(DeckCardSchema),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
 export const DecksSchema = z.array(DeckSchema);
 
-export const DeckInputSchema = DeckSchema.omit({
-  id: true,
-  userId: true,
-  createdAt: true,
-  updatedAt: true,
+export const DeckInputSchema = DeckSchema.pick({
+  title: true,
+  slug: true,
+  description: true,
+  type: true,
 });
 
 /* -------------------------------------------------------------------------------------------------
@@ -63,11 +68,19 @@ export const GetUserDeckSchema = z.object({
 export const CreateDeckSchema = z.object({
   userId: z.string().optional(),
   values: DeckInputSchema,
+  mainCards: z.array(DeckCardSchema).max(60),
+  extraCards: z.array(DeckCardSchema).max(15),
+  sideCards: z.array(DeckCardSchema).max(15),
+  valid: z.boolean().optional(),
 });
 
 export const UpdateDeckSchema = z.object({
   deckId: z.string().optional(),
   values: DeckInputSchema,
+  mainCards: z.array(DeckCardSchema),
+  extraCards: z.array(DeckCardSchema),
+  sideCards: z.array(DeckCardSchema),
+  valid: z.boolean().optional(),
 });
 
 export const RemoveDeckSchema = z.object({

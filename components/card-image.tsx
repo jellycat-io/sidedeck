@@ -3,11 +3,10 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
+import { BanIcon } from '@/components/ban-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { BanStatus } from '@/types/card';
-
-import { BanIcon } from './ban-icon';
 
 interface CardImageProps {
   src: string;

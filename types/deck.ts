@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-import { DeckSchema, DeckTypeSchema } from '@/schemas/deck';
+import { DeckCardSchema, DeckSchema, DeckTypeSchema } from '@/schemas/deck';
 
+export type DeckCard = z.infer<typeof DeckCardSchema>;
 export type DeckType = z.infer<typeof DeckTypeSchema>;
 export type Deck = z.infer<typeof DeckSchema>;
 
