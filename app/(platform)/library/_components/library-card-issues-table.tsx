@@ -1,5 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { BadgeEuro, Minus, Plus, Shield, Trash2 } from 'lucide-react';
+import {
+  BadgeEuro,
+  Handshake,
+  Languages,
+  Minus,
+  Plus,
+  Shield,
+  Trash2,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -51,7 +59,7 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
   {
     accessorKey: 'set.set_code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Set code' />
+      <DataTableColumnHeader column={column}>Set code</DataTableColumnHeader>
     ),
     cell: (cell) => (
       <Tooltip>
@@ -69,7 +77,7 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
   {
     accessorKey: 'rarity',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Rarity' />
+      <DataTableColumnHeader column={column}>Rarity</DataTableColumnHeader>
     ),
     cell: (cell) => (
       <div className='max-w-32 truncate'>
@@ -88,7 +96,9 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
   {
     accessorKey: 'language',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Language' />
+      <DataTableColumnHeader column={column}>
+        <Languages className='h-4 w-4' />
+      </DataTableColumnHeader>
     ),
     cell: (cell) => (
       <div className='flex justify-center items-center'>
@@ -105,20 +115,11 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
     },
   },
   {
-    accessorKey: 'quantity',
-    header: 'Quantity',
-    cell: (cell) => (
-      <QuantityButtonsGroup
-        issueId={cell.row.original.id}
-        quantity={cell.row.original.quantity}
-      />
-    ),
-    enableColumnFilter: false,
-  },
-  {
     accessorKey: 'tradeable',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Tradeable' />
+      <DataTableColumnHeader column={column}>
+        <Handshake className='h-4 w-4' />
+      </DataTableColumnHeader>
     ),
     cell: (cell) => (
       <div className='flex justify-center items-center'>
@@ -133,9 +134,20 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
     },
   },
   {
+    accessorKey: 'quantity',
+    header: 'Quantity',
+    cell: (cell) => (
+      <QuantityButtonsGroup
+        issueId={cell.row.original.id}
+        quantity={cell.row.original.quantity}
+      />
+    ),
+    enableColumnFilter: false,
+  },
+  {
     accessorKey: 'createdAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Added' />
+      <DataTableColumnHeader column={column}>Added</DataTableColumnHeader>
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
     meta: {
@@ -145,7 +157,7 @@ export const columns: ColumnDef<LibraryCardIssue>[] = [
   {
     accessorKey: 'updatedAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Updated' />
+      <DataTableColumnHeader column={column}>Updated</DataTableColumnHeader>
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
     meta: {

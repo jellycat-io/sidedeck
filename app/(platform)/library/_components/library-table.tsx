@@ -47,7 +47,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Name' />
+      <DataTableColumnHeader column={column}>Name</DataTableColumnHeader>
     ),
     cell: (cell) => <CardTooltip card={cell.row.original} />,
     filterFn: (row, id, value) => row.original.name.includes(value),
@@ -58,7 +58,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'type',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Type' />
+      <DataTableColumnHeader column={column}>Type</DataTableColumnHeader>
     ),
     cell: (cell) => <FrameTypeBadge card={cell.row.original} withLabel />,
     filterFn: (row, id, value) => {
@@ -73,7 +73,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'quantity',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Quantity' />
+      <DataTableColumnHeader column={column}>Quantity</DataTableColumnHeader>
     ),
     cell: (cell) => (
       <Badge variant='outline'>x {cell.row.original.quantity}</Badge>
@@ -83,7 +83,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Added' />
+      <DataTableColumnHeader column={column}>Added</DataTableColumnHeader>
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.createdAt),
     filterFn: dateRangeFilterFn,
@@ -94,7 +94,7 @@ export const columns: ColumnDef<LibraryCard>[] = [
   {
     accessorKey: 'updatedAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Updated' />
+      <DataTableColumnHeader column={column}>Updated</DataTableColumnHeader>
     ),
     cell: (cell) => formatDateFromNow(cell.row.original.updatedAt),
     filterFn: dateRangeFilterFn,
