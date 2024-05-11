@@ -1,5 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { DeckListType } from '@prisma/client';
 import {
   Check,
   ChevronDown,
@@ -79,8 +80,6 @@ import { DECK_TYPES, Deck, DeckCard } from '@/types/deck';
 const EXTRA_DECK_LIMIT = 15;
 const SIDE_DECK_LIMIT = 15;
 
-type DeckList = 'main' | 'extra' | 'side';
-
 interface BuildDeckFormProps {
   userId: string;
   deck?: Deck;
@@ -98,11 +97,21 @@ const initialState = {
 };
 
 export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
+  const deckMainCards = deck?.lists.find(
+    (l) => l.type === DeckListType.MAIN,
+  )?.cards;
+  const deckExtraCards = deck?.lists.find(
+    (l) => l.type === DeckListType.EXTRA,
+  )?.cards;
+  const deckSideCards = deck?.lists.find(
+    (l) => l.type === DeckListType.SIDE,
+  )?.cards;
+
   const [expandMeta, setExpandMeta] = useState(!deck);
   const [slug, setSlug] = useState(deck?.slug ?? '');
-  const [mainCards, setMainCards] = useState(deck?.mainCards ?? []);
-  const [extraCards, setExtraCards] = useState(deck?.extraCards ?? []);
-  const [sideCards, setSideCards] = useState(deck?.sideCards ?? []);
+  const [mainCards, setMainCards] = useState(deckMainCards ?? []);
+  const [extraCards, setExtraCards] = useState(deckExtraCards ?? []);
+  const [sideCards, setSideCards] = useState(deckSideCards ?? []);
 
   const router = useRouter();
   const { refreshDecks } = useDecks();
@@ -155,18 +164,40 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
     deck
       ? updateDeck({
           deckId: deck.id,
-          values: { ...values, slug },
-          mainCards,
-          extraCards,
-          sideCards,
+          meta: { ...values, slug },
+          lists: [
+            {
+              type: DeckListType.MAIN,
+              cards: mainCards,
+            },
+            {
+              type: DeckListType.EXTRA,
+              cards: extraCards,
+            },
+            {
+              type: DeckListType.SIDE,
+              cards: sideCards,
+            },
+          ],
           valid: isDeckValid,
         })
       : createDeck({
           userId,
-          values: { ...values, slug },
-          mainCards,
-          extraCards,
-          sideCards,
+          meta: { ...values, slug },
+          lists: [
+            {
+              type: DeckListType.MAIN,
+              cards: mainCards,
+            },
+            {
+              type: DeckListType.EXTRA,
+              cards: extraCards,
+            },
+            {
+              type: DeckListType.SIDE,
+              cards: sideCards,
+            },
+          ],
           valid: isDeckValid,
         });
   }
@@ -175,29 +206,29 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
     removeDeck({ deckId: deck?.id });
   }
 
-  function handleAddCard(card: ApiCard, list: DeckList) {
+  function handleAddCard(card: ApiCard, list: DeckListType) {
     switch (list) {
-      case 'main':
+      case DeckListType.MAIN:
         setMainCards([...mainCards, { id: card.id, quantity: 1 }]);
         break;
-      case 'extra':
+      case DeckListType.EXTRA:
         setExtraCards([...extraCards, { id: card.id, quantity: 1 }]);
         break;
-      case 'side':
+      case DeckListType.SIDE:
         setSideCards([...sideCards, { id: card.id, quantity: 1 }]);
         break;
     }
   }
 
-  function handleRemoveCard(cardId: string, list: DeckList) {
+  function handleRemoveCard(cardId: string, list: DeckListType) {
     switch (list) {
-      case 'main':
+      case DeckListType.MAIN:
         setMainCards((prev) => prev.filter((card) => card.id !== cardId));
         break;
-      case 'extra':
+      case DeckListType.EXTRA:
         setExtraCards((prev) => prev.filter((card) => card.id !== cardId));
         break;
-      case 'side':
+      case DeckListType.SIDE:
         setSideCards((prev) => prev.filter((card) => card.id !== cardId));
         break;
     }
@@ -205,25 +236,25 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
 
   function handleChangeQuantity(
     cardId: string,
-    type: DeckList,
+    type: DeckListType,
     quantity: number,
   ) {
     switch (type) {
-      case 'main':
+      case DeckListType.MAIN:
         setMainCards((prev) =>
           prev.map((card) =>
             card.id === cardId ? { ...card, quantity } : card,
           ),
         );
         break;
-      case 'extra':
+      case DeckListType.EXTRA:
         setExtraCards((prev) =>
           prev.map((card) =>
             card.id === cardId ? { ...card, quantity } : card,
           ),
         );
         break;
-      case 'side':
+      case DeckListType.SIDE:
         setSideCards((prev) =>
           prev.map((card) =>
             card.id === cardId ? { ...card, quantity } : card,
@@ -235,9 +266,9 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
 
   function handleCancel() {
     form.reset();
-    setMainCards(deck ? deck.mainCards : []);
-    setExtraCards(deck ? deck.extraCards : []);
-    setSideCards(deck ? deck.sideCards : []);
+    setMainCards(deckMainCards ?? []);
+    setExtraCards(deckExtraCards ?? []);
+    setSideCards(deckSideCards ?? []);
   }
 
   function getApiCard(id: string) {
@@ -257,10 +288,18 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
   const actionDisabled = useMemo(
     () =>
       !form.formState.isDirty &&
-      (!mainCards.length || mainCards === deck?.mainCards) &&
-      (!extraCards.length || extraCards === deck?.extraCards) &&
-      (!sideCards.length || sideCards === deck?.sideCards),
-    [form.formState.isDirty, mainCards, extraCards, sideCards, deck],
+      (!mainCards.length || mainCards === deckMainCards) &&
+      (!extraCards.length || extraCards === deckExtraCards) &&
+      (!sideCards.length || sideCards === deckSideCards),
+    [
+      form.formState.isDirty,
+      mainCards,
+      extraCards,
+      sideCards,
+      deckMainCards,
+      deckExtraCards,
+      deckSideCards,
+    ],
   );
 
   const mainPrice = useMemo(
@@ -442,7 +481,7 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
                     <DeckCardItem
                       key={card.id}
                       deckCard={card}
-                      deckList='main'
+                      deckList={DeckListType.MAIN}
                       apiCard={getApiCard(card.id)}
                       isMaxCardQuantityReached={isMaxCardQuantityReached(
                         mainCards,
@@ -481,7 +520,7 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
                     <DeckCardItem
                       key={card.id}
                       deckCard={card}
-                      deckList='extra'
+                      deckList={DeckListType.EXTRA}
                       apiCard={getApiCard(card.id)}
                       isMaxCardQuantityReached={isMaxCardQuantityReached(
                         mainCards,
@@ -520,7 +559,7 @@ export function BuildDeckForm({ userId, deck }: BuildDeckFormProps) {
                     <DeckCardItem
                       key={card.id}
                       deckCard={card}
-                      deckList='side'
+                      deckList={DeckListType.SIDE}
                       apiCard={getApiCard(card.id)}
                       isMaxCardQuantityReached={isMaxCardQuantityReached(
                         mainCards,
@@ -594,7 +633,7 @@ interface CardSearchProps {
   mainCards: DeckCard[];
   extraCards: DeckCard[];
   sideCards: DeckCard[];
-  onAddCard: (card: ApiCard, list: DeckList) => void;
+  onAddCard: (card: ApiCard, list: DeckListType) => void;
 }
 
 function CardSearch({
@@ -714,7 +753,7 @@ function CardSearch({
                               mainCards.some((c) => c.id === card.id) ||
                               !isMainDeckCard(card)
                             }
-                            onClick={() => onAddCard(card, 'main')}
+                            onClick={() => onAddCard(card, DeckListType.MAIN)}
                           >
                             Add to main deck
                           </DropdownMenuItem>
@@ -723,13 +762,13 @@ function CardSearch({
                               extraCards.some((c) => c.id === card.id) ||
                               !isExtraDeckCard(card)
                             }
-                            onClick={() => onAddCard(card, 'extra')}
+                            onClick={() => onAddCard(card, DeckListType.EXTRA)}
                           >
                             Add to extra deck
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             disabled={sideCards.some((c) => c.id === card.id)}
-                            onClick={() => onAddCard(card, 'side')}
+                            onClick={() => onAddCard(card, DeckListType.SIDE)}
                           >
                             Add to side deck
                           </DropdownMenuItem>
@@ -781,10 +820,14 @@ function CardSearch({
 interface DeckCardItemProps {
   deckCard: DeckCard;
   apiCard: ApiCard;
-  deckList: DeckList;
+  deckList: DeckListType;
   isMaxCardQuantityReached: boolean;
-  onChangeQuantity: (cardId: string, type: DeckList, quantity: number) => void;
-  onRemoveCard: (cardId: string, type: DeckList) => void;
+  onChangeQuantity: (
+    cardId: string,
+    type: DeckListType,
+    quantity: number,
+  ) => void;
+  onRemoveCard: (cardId: string, type: DeckListType) => void;
 }
 
 function DeckCardItem({

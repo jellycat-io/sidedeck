@@ -161,7 +161,7 @@ export async function getUserCardIssueById(id: string) {
     const issue = await db.userCard.findFirst({
       where: {
         issues: {
-          has: {
+          some: {
             id,
           },
         },

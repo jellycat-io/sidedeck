@@ -21,6 +21,8 @@ import { ApiCard } from '@/types/card';
 
 import { CardSheet } from './card-sheet';
 
+import { BanIcon } from '../ban-icon';
+
 const PAGE_SIZE = 20;
 
 export function CardFinder() {
@@ -130,7 +132,15 @@ export function CardFinder() {
                   }}
                   className='flex items-center justify-between'
                 >
-                  <span>{card.name}</span>
+                  <div className='flex items-center space-x-2'>
+                    {card.banlistInfo?.ban_tcg && (
+                      <BanIcon
+                        status={card.banlistInfo?.ban_tcg}
+                        className='h-4 w-4 text-xs'
+                      />
+                    )}
+                    <span>{card.name}</span>
+                  </div>
                   <FrameTypeBadge card={card} withLabel />
                 </CommandItem>
               ))}

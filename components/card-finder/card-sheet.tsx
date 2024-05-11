@@ -1,5 +1,6 @@
 'use client';
 
+import { CardLanguage } from '@prisma/client';
 import { Link, Star, Swords, Shield, Plus, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -56,7 +57,6 @@ import {
   ApiCard,
   ApiCardSet,
   CARD_LANGUAGES,
-  CardLanguage,
   CardRarityName,
 } from '@/types/card';
 
@@ -257,7 +257,7 @@ interface CardIssuesTableProps {
 function CardIssuesTable({ userId, card, onAdd }: CardIssuesTableProps) {
   const form = useForm<AddCardFormData>({
     defaultValues: {
-      language: 'en',
+      language: CardLanguage.EN,
       quantity: 1,
     },
   });
@@ -292,6 +292,7 @@ function CardIssuesTable({ userId, card, onAdd }: CardIssuesTableProps) {
         language: data.language,
         quantity: Number(data.quantity),
         rarity: rarityCode,
+        tradeable: false,
         set: {
           setCode: set.set_code,
           setName: set.set_name,

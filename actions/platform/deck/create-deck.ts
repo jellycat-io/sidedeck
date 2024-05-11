@@ -17,10 +17,8 @@ export type CreateDeckResponse = ActionState<
 
 async function handler({
   userId,
-  values,
-  mainCards,
-  extraCards,
-  sideCards,
+  meta,
+  lists,
   valid,
 }: CreateDeckInput): Promise<CreateDeckResponse> {
   if (!userId) {
@@ -29,14 +27,9 @@ async function handler({
     };
   }
 
-  const deck = await createDeck(
-    userId,
-    values,
-    mainCards,
-    extraCards,
-    sideCards,
-    valid,
-  );
+  console.log('Creating deck', meta, lists);
+
+  const deck = await createDeck(userId, meta, lists, valid);
 
   if (!deck) {
     return {

@@ -1,13 +1,9 @@
+import { CardLanguage, CardRarity } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
-import {
-  CardLanguage,
-  CardRarityCode,
-  CardRarityName,
-  LibraryCard,
-} from '@/types/card';
+import { CardRarityCode, CardRarityName, LibraryCard } from '@/types/card';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -154,100 +150,100 @@ export function getFrametypeColors(
 
 export function keyToLanguage(key: CardLanguage): string {
   switch (key) {
-    case 'en':
+    case CardLanguage.EN:
       return 'English';
-    case 'de':
+    case CardLanguage.DE:
       return 'German';
-    case 'fr':
+    case CardLanguage.FR:
       return 'French';
-    case 'it':
+    case CardLanguage.IT:
       return 'Italian';
-    case 'es':
+    case CardLanguage.ES:
       return 'Spanish';
-    case 'pt':
+    case CardLanguage.PT:
       return 'Portuguese';
-    case 'jp':
+    case CardLanguage.JP:
       return 'Japanese';
-    case 'kr':
+    case CardLanguage.KR:
       return 'Korean';
   }
 }
 
-export function codeToRarityName(code: CardRarityCode): CardRarityName {
+export function codeToRarityName(code: CardRarity): CardRarityName {
   switch (code) {
-    case 'C':
+    case CardRarity.C:
       return 'Common';
-    case 'R':
+    case CardRarity.R:
       return 'Rare';
-    case 'SR':
+    case CardRarity.SR:
       return 'Super Rare';
-    case 'HFR':
+    case CardRarity.HFR:
       return 'Holographic Foil Rare';
-    case 'UR':
+    case CardRarity.UR:
       return 'Ultra Rare';
-    case 'URP':
+    case CardRarity.URP:
       return "Ultra Rare Pharaoh's Rare";
-    case 'UtR':
+    case CardRarity.UtR:
       return 'Ultimate Rare';
-    case 'ScR':
+    case CardRarity.ScR:
       return 'Secret Rare';
-    case 'QSrR':
+    case CardRarity.QSrR:
       return 'Quarter Century Secret Rare';
-    case 'UScR':
+    case CardRarity.UScR:
       return 'Ultra-Secret Rare';
-    case 'ScUR':
+    case CardRarity.ScUR:
       return 'Secret-Ultra Rare';
-    case 'PScR':
+    case CardRarity.PScR:
       return 'Prismatic Secret Rare';
-    case 'PR':
+    case CardRarity.PR:
       return 'Parallel Rare';
-    case 'SFR':
+    case CardRarity.SFR:
       return 'Starfoil Rare';
-    case 'SLR':
+    case CardRarity.SLR:
       return 'Starlight Rare';
-    case 'GR':
+    case CardRarity.GR:
       return 'Ghost Rare';
-    case 'GUR':
+    case CardRarity.GUR:
       return 'Ghost Ultra Rare';
   }
 }
 
-export function rarityNameToCode(name: CardRarityName): CardRarityCode {
+export function rarityNameToCode(name: CardRarityName): CardRarity {
   switch (name) {
     case 'Common':
-      return 'C';
+      return CardRarity.C;
     case 'Rare':
-      return 'R';
+      return CardRarity.R;
     case 'Super Rare':
-      return 'SR';
+      return CardRarity.SR;
     case 'Holographic Foil Rare':
-      return 'HFR';
+      return CardRarity.HFR;
     case 'Ultra Rare':
-      return 'UR';
+      return CardRarity.UR;
     case "Ultra Rare Pharaoh's Rare":
-      return 'URP';
+      return CardRarity.URP;
     case 'Ultimate Rare':
-      return 'UtR';
+      return CardRarity.UtR;
     case 'Secret Rare':
-      return 'ScR';
+      return CardRarity.ScR;
     case 'Quarter Century Secret Rare':
-      return 'QSrR';
+      return CardRarity.QSrR;
     case 'Ultra-Secret Rare':
-      return 'UScR';
+      return CardRarity.UScR;
     case 'Secret-Ultra Rare':
-      return 'ScUR';
+      return CardRarity.ScUR;
     case 'Prismatic Secret Rare':
-      return 'PScR';
+      return CardRarity.PScR;
     case 'Parallel Rare':
-      return 'PR';
+      return CardRarity.PR;
     case 'Starfoil Rare':
-      return 'SFR';
+      return CardRarity.SFR;
     case 'Starlight Rare':
-      return 'SLR';
+      return CardRarity.SLR;
     case 'Ghost Rare':
-      return 'GR';
+      return CardRarity.GR;
     case 'Ghost Ultra Rare':
-      return 'GUR';
+      return CardRarity.GUR;
   }
 }
 

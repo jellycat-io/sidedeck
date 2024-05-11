@@ -1,3 +1,4 @@
+import { CardLanguage, CardRarity } from '@prisma/client';
 import { z } from 'zod';
 
 /* -------------------------------------------------------------------------------------------------
@@ -111,25 +112,7 @@ export const CardRaceSchema = z.union([
   z.literal('zombie'),
 ]);
 
-export const CardRarityCodeSchema = z.union([
-  z.literal('C'),
-  z.literal('R'),
-  z.literal('SR'),
-  z.literal('HFR'),
-  z.literal('UR'),
-  z.literal('URP'),
-  z.literal('UtR'),
-  z.literal('ScR'),
-  z.literal('QSrR'),
-  z.literal('UScR'),
-  z.literal('ScUR'),
-  z.literal('PScR'),
-  z.literal('PR'),
-  z.literal('SFR'),
-  z.literal('SLR'),
-  z.literal('GR'),
-  z.literal('GUR'),
-]);
+export const CardRarityCodeSchema = z.nativeEnum(CardRarity);
 
 export const CardRarityNameSchema = z.union([
   z.literal('Common'),
@@ -151,16 +134,7 @@ export const CardRarityNameSchema = z.union([
   z.literal('Ghost Ultra Rare'),
 ]);
 
-export const CardLanguageSchema = z.union([
-  z.literal('en'),
-  z.literal('de'),
-  z.literal('fr'),
-  z.literal('it'),
-  z.literal('es'),
-  z.literal('pt'),
-  z.literal('jp'),
-  z.literal('kr'),
-]);
+export const CardLanguageSchema = z.nativeEnum(CardLanguage);
 
 export const ApiCardSetSchema = z.object({
   set_name: z.string(),
@@ -222,11 +196,11 @@ export const UserCardIssueSchema = z.object({
   id: z.string(),
   language: CardLanguageSchema,
   quantity: z.number(),
-  tradeable: z.boolean().optional(),
+  tradeable: z.boolean(),
   rarity: CardRarityCodeSchema,
   set: UserCardSetSchema,
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 export const UserCardIssuesSchema = z.array(UserCardIssueSchema);

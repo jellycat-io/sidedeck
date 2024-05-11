@@ -17,10 +17,8 @@ export type UpdateDeckResponse = ActionState<
 
 async function handler({
   deckId,
-  values,
-  mainCards,
-  extraCards,
-  sideCards,
+  meta,
+  lists,
   valid,
 }: UpdateDeckInput): Promise<UpdateDeckResponse> {
   if (!deckId) {
@@ -29,14 +27,7 @@ async function handler({
     };
   }
 
-  const deck = await updateDeck(
-    deckId,
-    values,
-    mainCards,
-    extraCards,
-    sideCards,
-    valid,
-  );
+  const deck = await updateDeck(deckId, meta, lists, valid);
 
   if (!deck) {
     return {

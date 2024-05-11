@@ -2,12 +2,38 @@
  * Definitions
  * -----------------------------------------------------------------------------------------------*/
 
+import { DeckListType } from '@prisma/client';
 import { z } from 'zod';
 
 export const DeckCardSchema = z.object({
   id: z.string(),
   quantity: z.number(),
 });
+
+export const DeckListTypeSchema = z.nativeEnum(DeckListType);
+
+export const DeckListSchema = z.object({
+  type: z.nativeEnum(DeckListType),
+  cards: z.array(DeckCardSchema),
+});
+// .refine((data) => {
+//   if (
+//     data.type === DeckListType.MAIN &&
+//     (data.cards.length < 40 || data.cards.length > 60)
+//   ) {
+//     return false;
+//   }
+
+//   if (data.type === DeckListType.EXTRA && data.cards.length > 15) {
+//     return false;
+//   }
+
+//   if (data.type === DeckListType.SIDE && data.cards.length > 15) {
+//     return false;
+//   }
+
+//   return true;
+// });
 
 export const DeckTypeSchema = z.union([
   z.literal('midrange'),
@@ -27,9 +53,7 @@ export const DeckSchema = z.object({
   description: z.string().optional(),
   type: DeckTypeSchema,
   valid: z.boolean(),
-  mainCards: z.array(DeckCardSchema),
-  extraCards: z.array(DeckCardSchema),
-  sideCards: z.array(DeckCardSchema),
+  lists: z.array(DeckListSchema),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -67,19 +91,15 @@ export const GetUserDeckSchema = z.object({
 
 export const CreateDeckSchema = z.object({
   userId: z.string().optional(),
-  values: DeckInputSchema,
-  mainCards: z.array(DeckCardSchema).max(60),
-  extraCards: z.array(DeckCardSchema).max(15),
-  sideCards: z.array(DeckCardSchema).max(15),
+  meta: DeckInputSchema,
+  lists: z.array(DeckListSchema),
   valid: z.boolean().optional(),
 });
 
 export const UpdateDeckSchema = z.object({
   deckId: z.string().optional(),
-  values: DeckInputSchema,
-  mainCards: z.array(DeckCardSchema),
-  extraCards: z.array(DeckCardSchema),
-  sideCards: z.array(DeckCardSchema),
+  meta: DeckInputSchema,
+  lists: z.array(DeckListSchema),
   valid: z.boolean().optional(),
 });
 

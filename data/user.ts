@@ -10,7 +10,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
       },
     });
   } catch (e) {
-    throw new Error(`Error getting user by email: ${email}`);
+    throw new Error(`Error getting user by email <${email}>: ${e}`);
   }
 }
 
@@ -22,6 +22,6 @@ export async function getUserById(id: string): Promise<User | null> {
       },
     });
   } catch (e) {
-    throw new Error(`Error getting user by id: ${id}`);
+    throw new Error(`Error getting user by id <${id}>: ${e}`);
   }
 }
