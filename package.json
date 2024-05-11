@@ -12,7 +12,7 @@
     "check-types": "tsc --noEmit",
     "ui:add": "pnpx shadcn-ui@latest add",
     "postinstall": "prisma generate",
-    "vercel:build": "prisma db push && next build",
+    "vercel:build": "next build",
     "update:cards": "pnpx tsx ./scripts/update-cards.ts",
     "prepare": "husky"
   },
