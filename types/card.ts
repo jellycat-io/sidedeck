@@ -38,9 +38,7 @@ export type LibraryCard = z.infer<typeof LibraryCardSchema>;
 export type LibraryCardIssue = z.infer<typeof UserCardIssueSchema>;
 export type LibraryCardSet = z.infer<typeof UserCardSetSchema>;
 
-export const CARD_LANGUAGES = CardLanguageSchema._def.options.map(
-  (option) => option.value,
-);
+export const CARD_LANGUAGES = Object.values(CardLanguageSchema._def.values);
 
 export const CARD_TYPES = CardTypeSchema._def.options.map(
   (option) => option.value,

@@ -63,8 +63,8 @@ async function handler({
           issues: {
             push: {
               id: createId(),
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
               ...issue,
             },
           },
@@ -81,8 +81,8 @@ async function handler({
           {
             ...issue,
             id: createId(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },

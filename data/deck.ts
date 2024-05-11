@@ -1,8 +1,8 @@
+import { DeckList } from '@prisma/client';
 import { z } from 'zod';
 
 import { db } from '@/lib/db';
 import { DeckInputSchema } from '@/schemas/deck';
-import { DeckCard } from '@/types/deck';
 
 export async function getDecks() {
   try {
@@ -59,35 +59,29 @@ export async function getUserDeck(userId: string, deckId: string) {
 
 export async function createDeck(
   userId: string,
-  data: z.infer<typeof DeckInputSchema>,
-  mainCards: DeckCard[],
-  extraCards: DeckCard[],
-  sideCards: DeckCard[],
+  meta: z.infer<typeof DeckInputSchema>,
+  lists: DeckList[],
   valid?: boolean,
 ) {
   try {
     return await db.deck.create({
       data: {
         userId,
-        ...data,
-        mainCards,
-        extraCards,
-        sideCards,
+        ...meta,
+        lists,
         valid,
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error(`Prisma error: ${error}`);
     return null;
   }
 }
 
 export async function updateDeck(
   deckId: string,
-  values: z.infer<typeof DeckInputSchema>,
-  mainCards: DeckCard[],
-  extraCards: DeckCard[],
-  sideCards: DeckCard[],
+  meta: z.infer<typeof DeckInputSchema>,
+  lists: DeckList[],
   valid?: boolean,
 ) {
   try {
@@ -96,15 +90,13 @@ export async function updateDeck(
         id: deckId,
       },
       data: {
-        ...values,
-        mainCards,
-        extraCards,
-        sideCards,
+        ...meta,
+        lists,
         valid,
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error(`Prisma error: ${error}`);
     return null;
   }
 }

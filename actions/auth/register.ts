@@ -26,7 +26,7 @@ async function handler(
 
   if (existingUser) return { error: 'Email already taken.' };
 
-  await db.user.create({
+  const user = await db.user.create({
     data: {
       name,
       email,
@@ -34,7 +34,14 @@ async function handler(
     },
   });
 
+  if (!user) return { error: 'Failed to create user.' };
+
   const verificationToken = await generateVerificationToken(email);
+
+  if (!verificationToken) {
+    return { error: 'Failed to create verification token.' };
+  }
+
   await sendVerificationEmail(
     name,
     verificationToken.email,
