@@ -50,7 +50,8 @@ export const columns: ColumnDef<LibraryCard>[] = [
       <DataTableColumnHeader column={column}>Name</DataTableColumnHeader>
     ),
     cell: (cell) => <CardTooltip card={cell.row.original} />,
-    filterFn: (row, id, value) => row.original.name.includes(value),
+    filterFn: (row, id, value) =>
+      row.original.name.toLowerCase().includes(value.toLowerCase()),
     meta: {
       filterVariant: 'text',
     },

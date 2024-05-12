@@ -26,10 +26,30 @@ export default function DashboardPage() {
   const { cards, loading } = useLibrary();
   const { toggleFinder } = useCards();
 
+  // Total count of each card's issue quantity
+  const totalCards = cards.reduce((total, card) => {
+    return (
+      total +
+      card.issues.reduce((subTotal, issue) => subTotal + issue.quantity, 0)
+    );
+  }, 0);
+
   return (
     <div className='px-8 py-6 flex flex-col gap-y-4' suppressHydrationWarning>
       <div className='flex justify-between items-center'>
-        <h1 className='text-xl font-semibold'>Library</h1>
+        <div className='flex flex-col space-y-1'>
+          <h1 className='text-xl font-semibold'>Library</h1>
+          <div className='flex items-center space-x-2 text-sm'>
+            <p>
+              <span className='font-semibold'>{totalCards}</span> card
+              {totalCards !== 1 && 's'}
+            </p>
+            <p>
+              <span className='font-semibold'>{cards.length}</span> unique card
+              {cards.length !== 1 && 's'}
+            </p>
+          </div>
+        </div>
         <div className='flex items-center space-x-4'>
           <p className='text-sm'>View mode</p>
           <div className='flex border rounded-md overflow-hidden'>
